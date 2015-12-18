@@ -1,0 +1,311 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+@import "mixin";
+html{
+	font-size: 62.5%
+}
+body{
+	font-family: "Microsoft YaHei",SimHei,Arial,sans-serif;
+}
+.ng-dirty{
+	.error{
+		color: red;
+	}
+}
+.hiddentabs>.tab-nav{
+	display: none;
+}
+.scroll-bg{
+	background: url('../img/bg.png') no-repeat center center fixed;
+	background-size: cover;
+}
+.supplier{
+	.item-img {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		&>div{
+			float: left;
+			padding-top: 5px;
+			width: 26%;
+			margin-left: 5.5%;
+		}
+	}
+	.top-icon{	
+		position: relative;
+		height:76px;
+		width: 100%;
+		>i{
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			height: 6rem;
+			width: 6rem;
+			border-radius: 100px;
+			font-size: 5rem;
+			text-align: center;
+			line-height: 5rem;
+			color: #ff7200;
+			background-color: #fff;
+		}
+	}
+	.clearfix{
+		@extend %clearfix;
+	}
+	.card-round{
+		border-radius: 10px;
+	}
+	.button-round{
+		border-radius: 25px;
+	}
+	.text-right{
+		text-align: right;
+	}
+	.text-center{
+		text-align: center;
+	}
+	.control-label{
+		position: relative;
+		margin-bottom: 5px;
+		font-size: 1.4rem;
+		>.label,label{
+			position: absolute;
+			left: 0;
+		}
+		>.value{
+			padding-left: 3em;
+		}
+	}
+	.diamonds-bg{
+		background: url('../img/diamonds_bg.jpg') repeat;		
+	}
+	.card>.item-divider{
+		text-align: center;
+		color: #ff7a00;
+	}
+	.release-keywords{
+		.item-button-plus{
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+	}
+	.order-info{
+		>.name{
+			font-size: 1.6rem;
+			color: #000;
+		}
+		>.small{
+			font-size: 1.2rem;
+			color: #7d7d7d;
+		}
+	}
+	.order-list{
+		.item{
+			padding: 10px;
+			>.name{
+				padding-right: 3em;
+			}
+			>.state{
+				position: absolute;
+				right: 10px;
+				top: 2em;
+				font-size: 1.2rem;
+				text-decoration: none;
+				color: #00a0e8;
+				&.state-quote{
+					top: 6px;
+					>i{
+						display: block;
+						text-align: center;
+						font-size: 2.5rem;
+						color: #ff7a00;
+					}
+				}
+			}
+			>.logistics-tracking{
+				position: absolute;
+				bottom: 10px;
+				left: 7.5em;
+				font-size: 1.2rem;
+				text-decoration: none;
+				color: #009b44;
+			}
+		}
+	}
+	.quotation{
+		.order-info-warp{
+			padding-top: 20px;
+			padding-bottom: 20px;
+			background: linear-gradient(#fbeee5,#f7f7f7);
+			>i{
+				position: absolute;
+				left: 10px;
+			}
+			>.order-info{
+				padding-left: 50px;
+			}
+		}
+		.card{
+			margin-top: 0;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+		.placeholder-unit{
+			position: absolute;
+			right: 15px;
+			top: 10px;
+			font-size: 1.6rem;
+			color: #fe0000;
+		}
+		.button-round{
+			margin-top: 20%;
+		}
+	}
+	.order-detail{
+		.merchant-wrap{
+			position: relative;
+			>.merchant-cooperation{
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-100%);
+				font-size: 46px;
+				color: #4ed7bb;
+			}
+			>.merchant{
+				width: 43%;
+				font-size: 1.2rem;
+				&.merchant-a{
+					float: left;
+				}
+				&.merchant-b{
+					float: right;
+				}
+				>.icon{
+					color: #ff7a00;
+				}
+				>.name{
+					line-height: 1.5;
+					color: #494949;
+				}
+				>.tel{
+					color: #989898;
+				}
+			}
+		}
+		.control-label{
+			.name{
+				font-size: 1.6rem;
+				color: #000;
+			}
+			.total{
+				font-size: 1.6rem;
+				color: #e70010;
+			}
+		}
+	}
+	.logistics-track{
+		.logistics-info-wrap{
+			>.end-state{
+				margin-bottom: 16px;
+				font-size: 1.6rem;
+				color: #019847;
+			}
+			>.logistics-info{
+				>.track-item{
+					padding-bottom: 16px;
+					padding-left: 16px;
+					border-left: 1px solid #c9c9c9;
+					&:last-child{
+						margin-left: 1px;
+						border-left-width: 0;
+					}
+					>i{
+						position: absolute;
+						margin-left: -23px;
+						background-color: #fff;
+						&.active{
+							width: 13px;
+							height: 13px;
+							border-radius: 20px;
+							line-height: 1;
+							overflow: hidden;
+							color: #f00;
+					    background-color: #f00;
+						}
+					}
+					>.schedule{
+						font-size: 1.2rem;
+						color: #666;
+					}
+					>.state{
+						font-size: 1.4rem;
+						color: #313131;
+					}
+				}
+			}
+		}
+	}
+	.personal-center{
+		.scroll{
+			height: 100%;
+		}
+		.top-info{
+			position: absolute;
+			top: 0;
+			height: 40%;
+			width: 100%;
+			>.my-portrait{
+				height: 100%;
+				>i{
+					transform: translate(-50%, -65%);
+				}
+			}
+			>.my-email{
+				position: absolute;
+				bottom: 1.8rem;
+				width: 100%;
+				font-size: 1.8rem;
+				text-align: center;
+				color: #fff;
+			}
+		}
+		.bottom-info{
+			position: absolute;
+			bottom: 0;
+			height: 60%;
+			width: 100%;
+			color: #313131;
+			line-height: 2;
+			>.list{
+				padding-left: 1.6rem;
+				padding-right: 1.6rem;
+				padding-top: 1rem;
+				>.info{
+					font-size: 1.8rem;
+			    word-break: break-word;
+				}
+			}
+		}
+	}
+}

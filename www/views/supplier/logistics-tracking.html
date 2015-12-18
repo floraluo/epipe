@@ -1,0 +1,39 @@
+<ion-view view-title="物流详情">
+	<ion-content class="scroll-bg logistics-track">
+		<div class="card card-round">
+			<div class="item item-divider diamonds-bg">
+				轨迹追踪
+			</div>
+			<div class="item item-body">
+				<div class="commodity-info-wrap">
+					<div class="control-label">
+						<span class="label">单号：</span>
+						<div class="value">{{thisOrder.orderNum}}</div>
+					</div>
+					<div class="control-label">
+						<span class="label">商品：</span>
+						<div class="value">{{thisOrder.productName}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="item item-body">
+				<div class="logistics-info-wrap">
+					<div class="end-state" ng-show="transit.isSuccess">你的包裹已被签收</div>
+					<div class="end-state" ng-show="!transit.isSuccess">你的包裹正在运输中，请耐心等待...</div>
+					<div class="logistics-info">
+						<div class="track-item" ng-repeat="t in transit.address">
+							<i class="icon ion-ios-circle-outline"></i>
+							<div class="schedule">
+								<span class="date">{{t.date}}</span>
+								<span class="week">{{t.week}}</span>
+								<span class="time">{{t.time}}</span>
+							</div>
+							<div class="state">{{t.place}}</div>
+						</div>
+					</div>
+				</div>
+				<a class="button button-full button-stable button-round" href="#/supplier/orderDetail?orderId={{thisOrder.orderId}}">联系买家</a>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

@@ -1,0 +1,11 @@
+<ion-tabs class="tabs-positive tabs-icon-top" ng-class="{hiddentabs: keyboardOpen}" ng-controller="tabsCtrl">
+	<ion-tab title="商品关键字" icon-on="ion-ios-home" icon-off="ion-ios-home-outline" href="#/supplier/release">
+		<ion-nav-view name="tabRelease"></ion-nav-view>
+	</ion-tab>
+	<ion-tab title="商品订单" icon-on="ion-ios-star" icon-off="ion-ios-star-outline" href="#/supplier/orderList">
+		<ion-nav-view name="tabPO"></ion-nav-view>
+	</ion-tab>
+	<ion-tab title="个人中心"  icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" href="#/supplier/personal">
+		<ion-nav-view name="tabPersonalCenter"></ion-nav-view>
+	</ion-tab>
+</ion-tabs>

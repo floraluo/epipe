@@ -1,0 +1,30 @@
+<ion-view  view-title="登录">
+    <ion-content class="scroll-bg padding">
+    <form name="login" ng-submit="supplierLogin(login)" novalidate>        
+        <div class="list list-inset card list-round card-round">
+        	<ion-item class="item-input">
+				<input type="email" name="name" placeholder="邮箱" ng-model="user.name" required/>
+            </ion-item>
+            <div class="padding" ng-show="login.name.$error.email">
+                <span class="error">邮箱格式错误！</span>
+            </div>
+            <ion-item class="item-input">
+                <input name="suPassword" ng-model="user.password" ng-keydown="user.validPassword = false" ng-minlength="6" ng-maxlength="20" required placeholder="请输入密码" type="password"/>
+            </ion-item>
+            <div class="padding" ng-show="user.validPassword">
+                <span class="error" >密码错误</span>
+            </div>
+            <div class="padding" ng-show="login.suPassword.$dirty  && login.suPassword.$error.maxlength">
+                <span class="error">密码小于20个字符！</span>
+            </div>
+            <div class="padding" ng-show="login.suPassword.$dirty  && login.suPassword.$error.minlength">
+                <span class="error">密码大于6个字符！</span>
+            </div>
+            <ion-item>
+                <button class="button button-full button-balanced button-round" type="submit">登录</button>
+                <a class="button button-full button-stable button-round" ng-click="pathToRegis()">还没有账号，赶紧来注册吧</a>
+            </ion-item>
+        </div>
+    </form>
+    </ion-content>
+</ion-view>

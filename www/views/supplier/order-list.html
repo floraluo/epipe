@@ -1,0 +1,23 @@
+<ion-view view-title="采购单">
+	<ion-content class="scroll-bg order-list">
+		<ion-refresher snipper="ios-small" on-refresh="displayOrderList()" pulling-text="下拉更新订单列表...">
+		</ion-refresher>		
+		<div class="card card-round" ng-repeat="o in order.content track by $index">
+			<div class="item item-text-wrap order-info">
+				<div class="name">{{o.productName}}</div>
+				<div class="small amount">数量：{{o.productAmount}}吨</div>
+				<div class="small date">{{o.date}}</div>
+				<a class="state state-quote" href="#/supplier/quotation?orderId={{o.orderId}}"  ng-if="o.state=='我要报价'">
+					<i class="icon ion-android-star-outline"></i>
+					{{o.state}}
+				</a>
+				<a class="state" href="#/supplier/orderDetail?orderId={{o.orderId}}" ng-if="o.state!='我要报价'">
+					{{o.state}}
+				</a>
+				<a class="logistics-tracking" href="#/supplier/logisticsTracking?orderId={{o.orderId}}" ng-if="o.trackInfo">物流追踪</a>
+			</div>
+		</div>
+		<ion-infinite-scroll spinner="ios-small" ng-if="order.canBeLoaded" on-infinite="loadMoreOrder()" distance="1%" immediate-check="true">
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

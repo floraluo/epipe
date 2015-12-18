@@ -1,0 +1,32 @@
+<ion-view view-title="我要报价">
+	<ion-content class="scroll-bg quotation">
+		<form name="quoForm" ng-submit="quotation(quoForm)" novalidate>	
+			<div class="order-info-warp">
+				<i class="button button-icon icon ion-ios-person-outline"></i>
+				<div class="order-info">
+					<div class="name">{{order.productName}}</div>
+					<div class="small amount">数量：{{order.productAmount}}吨</div>
+					<div class="small date">{{order.date}}</div>
+				</div>
+			</div>
+			<div class="list list-inset card card-round">
+				<label class="item item-input">
+					<input name="unitPrice" type="text" placeholder="单价" ng-model='productQuo.unitPrice' ng-min="0" ng-keyup="canlTotalPrice(order.productAmount)" required><span class="placeholder-unit">元</span>
+					<!-- <input name="unitPrice" type="text" placeholder="单价" ng-model='productQuo.unitPrice' ng-pattern="/^([1-9]\d*)|(\d+\.\d{1,2})$/" required><span class="placeholder-unit">元</span> -->
+				</label>
+				<div class="padding" ng-show="quoForm.unitPrice.$dirty && quoForm.unitPrice.$error.required">
+					<span class="error">单价不能为空！</span>
+				</div>
+				<!-- <label class="item item-input">
+					<input type="text" placeholder="数量" ng-model='productQuo.orderNum'>
+				</label> -->
+				<label class="item item-input">
+					<input type="text" placeholder="总价" ng-model='productQuo.totalPrice' required><span class="placeholder-unit">元</span>
+				</label>
+				<div class="item">
+					<button class="button button-full button-balanced button-round" type="submit">报价</button>
+				</div>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
