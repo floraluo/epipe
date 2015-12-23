@@ -15,6 +15,30 @@ angular.module('starter.directive' , [])
 		}
 	}
 }])
+.directive('hideTabs', ['$rootScope',function($rootScope){
+	return {
+		restrict: "A",
+		link: function(scope, element, attr){
+			if(element[0].nodeName == "INPUT"){
+				// element.bind('focus', function(){
+				// 	$rootScope.hideTabs = true;
+				// 	console.log(attr.index + "focus  "+ $rootScope.hideTabs)
+				// });
+				// element.bind('blur', function(){
+				// 	$rootScope.hideTabs = false;
+				// 	console.log(attr.index + "blur  "+ $rootScope.hideTabs)
+				// })
+			}else{
+				scope.$watch(attr.hideTabs, function(value){
+	                $rootScope.hideTabs = value;
+	            });
+	            scope.$on('$destroy', function() {
+	                $rootScope.hideTabs = false;
+	            });				
+			}
+		}
+	}
+}])
 .directive('repeat',[function(){
 	return {
 		restrict: "A",
@@ -39,7 +63,8 @@ angular.module('starter.directive' , [])
 }])
 .directive('selectImg', ['$ionicActionSheet', 
 						'$cordovaCamera',
-						function($ionicActionSheet, $cordovaCamera){
+						'$ionicPopup',
+						function($ionicActionSheet, $cordovaCamera,$ionicPopup){
 	return {
 		restrict: 'A',
 		link: function(scope, element){
@@ -77,12 +102,30 @@ angular.module('starter.directive' , [])
 								}, function (error) {
 									// console.log('Error: ' + error);
 									alert('imagePicker.getPictures:  '+error)
+								},{
+									// maximumImagesCount: 3,
+									width: 260,
+									height: 260,
+									quality: 70
 								}
 							);
 						}
 					}
 				})
 			})
+			scope.onHoldImg = function(index) {
+				var confirmPopup = $ionicPopup.confirm({
+					okText: '确认',
+					okType: 'button-balanced',
+					cancelText: '取消',
+					template: '确认要删除这张图片吗？'
+				});
+				confirmPopup.then(function(res) {
+					if(res) {
+						scope.userRegisInfo.myCredentials.splice(index,1)
+					}
+				});
+			}
 		}
 	}							
 }])

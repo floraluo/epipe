@@ -10870,15 +10870,9 @@ body {
   background-size: cover;
 }
 
-.supplier .item-img {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
 .supplier .item-img > div {
-  float: left;
-  padding-top: 5px;
-  width: 26%;
-  margin-left: 5.5%;
+  padding: 10px;
+  text-align: center;
 }
 .supplier .top-icon {
   position: relative;

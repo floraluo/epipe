@@ -1,4 +1,8 @@
 {
+	"orderInfo": {
+		"orderNum": "3736837484",
+		"productName": "高密度聚乙烯PPD沙发客3023"
+		},
 	"address":
 		[
 			{
@@ -39,6 +43,6 @@
 			}
 		],
 	"expressName":"申通快递",
-	"isSuccess":"true",
+	"isSuccess":true,
 	"expressId":"227161299995"
 }

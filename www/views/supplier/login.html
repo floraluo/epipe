@@ -3,15 +3,18 @@
     <form name="login" ng-submit="supplierLogin(login)" novalidate>        
         <div class="list list-inset card list-round card-round">
         	<ion-item class="item-input">
-				<input type="email" name="name" placeholder="邮箱" ng-model="user.name" required/>
+				<input type="email" name="name" placeholder="邮箱" ng-model="user.name" ng-keydown="supplier.registe=true" required/>
             </ion-item>
             <div class="padding" ng-show="login.name.$error.email">
                 <span class="error">邮箱格式错误！</span>
             </div>
+            <div class="padding" ng-show="!supplier.registe">
+                <span class="error">此账号还未注册！</span>
+            </div>
             <ion-item class="item-input">
-                <input name="suPassword" ng-model="user.password" ng-keydown="user.validPassword = false" ng-minlength="6" ng-maxlength="20" required placeholder="请输入密码" type="password"/>
+                <input name="suPassword" ng-model="user.password" ng-keydown="supplier.validPassword=true" ng-minlength="6" ng-maxlength="20" required placeholder="请输入密码" type="password"/>
             </ion-item>
-            <div class="padding" ng-show="user.validPassword">
+            <div class="padding" ng-show="!supplier.validPassword">
                 <span class="error" >密码错误</span>
             </div>
             <div class="padding" ng-show="login.suPassword.$dirty  && login.suPassword.$error.maxlength">

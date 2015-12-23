@@ -8,6 +8,7 @@ angular.module('starter.controller' , [])
 		}
 		$rootScope.$ionicGoBack (-1)
 	}
+	$rootScope.hideTabs = false;
 	// $rootScope.keyboardOpen = false;
 	// window.addEventListener('native.keyboardshow', function(){
 	// 	$rootScope.keyboardOpen = true;
@@ -37,9 +38,16 @@ angular.module('starter.controller' , [])
 	function($scope, $state,$ionicBackdrop,$ionicLoading, supplier){
 	var user = $scope.user = {
 		name: '',
-		password: '',
-		validPassword: false
+		password: ''
 	};
+	// $scope.validPassword=false;
+	$scope.supplier={
+		registe: true,
+		validPassword: true
+	}
+	$scope.changeValidPassword = function(){
+		$scope.validPassword=false;
+	}
 	$scope.supplierLogin = function(myform){
 		if(myform.$valid){
 			$ionicBackdrop.retain();
@@ -49,14 +57,21 @@ angular.module('starter.controller' , [])
 			})
 			var promise = supplier.getSupplierInfo();
 			promise.then(function(data){
+				$ionicBackdrop.release();
+				$ionicLoading.hide();
+				console.log(data)
+				if(data.registe == false){
+					$scope.supplier.registe=data.registe;
+					return;
+				}
 				if(user.password == data.password){
 					alert("登录成功！")
-					$ionicBackdrop.release();
-					$ionicLoading.hide();
 					$state.go("supplier.release");
 				}else {
-					user.validPassword = true
+					$scope.supplier.validPassword=false
 				}
+			},function(data){
+				console.log(data)
 			})
 			console.log($scope.user)
 		}
@@ -66,6 +81,7 @@ angular.module('starter.controller' , [])
 		// window.location.reload();
 	}
 }])
+// 注册
 .controller('registerCtrl', ['$scope', '$rootScope', '$state', '$cordovaCamera','$ionicActionSheet',
 	function($scope, $rootScope, $state, $cordovaCamera,$ionicActionSheet){
 
@@ -117,38 +133,63 @@ angular.module('starter.controller' , [])
 	}
 }])
 // 订单列表
-.controller('orderListCtrl', ['$scope', 'order', '$state', '$stateParams', '$ionicPopup',
- function($scope, order, $state, $stateParams,$ionicPopup){
+.controller('orderListCtrl', ['$scope', 'order', '$state', '$stateParams', '$ionicPopup','$http',
+ function($scope, order, $state, $stateParams,$ionicPopup, $http){
 	$scope.order = {
 		canBeLoaded: true,
 		content: []
 	};
-	$scope.amount = 0;
-	var promise = order.getOrder();
-	promise.then(function(data){
+	// 获取订单列表数据 x条
+	$http
+	.get("../data/orderList.json")
+	.success(function(data){
 		$scope.order.content = data;
-	},function(data){
-		console.log(data);
 	})
-	$scope.displayOrderList = function(){
-		promise.then(function(data){
-			// $scope.order = $scope.order.concat(data);
+	.error(function(){
+
+	})
+	$scope.amount = 0;//测试数据
+
+	// 刷新订单列表
+	$scope.reLoadOrderList = function(){
+		$http
+		.get("../data/orderList.json")
+		.success(function(data){
 			$scope.order.content = data;
 			$scope.$broadcast('scroll.refreshComplete');
-		},function(data){
-			console.log(data);
 		})
+		.error(function(){
+
+		})
+		// promise.then(function(data){
+		// 	// $scope.order = $scope.order.concat(data);
+		// 	$scope.order.content = data;
+		// 	$scope.$broadcast('scroll.refreshComplete');
+		// },function(data){
+		// 	console.log(data);
+		// })
 	}
+	// 加载更多订单数据
 	$scope.loadMoreOrder = function(){
 		if($scope.amount < 2){
-			promise.then(function(data){
+			$http
+			.get("../data/orderList.json")
+			.success(function(data){
 				$scope.amount ++
 				$scope.order.content = $scope.order.content.concat(data);
-				// $scope.order = data;
 				$scope.$broadcast('scroll.infiniteScrollComplete');
-			},function(data){
-				console.log(data);
 			})
+			.error(function(){
+
+			})
+			// promise.then(function(data){
+			// 	$scope.amount ++
+			// 	$scope.order.content = $scope.order.content.concat(data);
+			// 	// $scope.order = data;
+			// 	$scope.$broadcast('scroll.infiniteScrollComplete');
+			// },function(data){
+			// 	console.log(data);
+			// })
 		}else{
 			$scope.order.canBeLoaded = false;
 			$ionicPopup.alert({
@@ -162,7 +203,7 @@ angular.module('starter.controller' , [])
 	function($scope, $http, $state, $stateParams, $ionicHistory, order){
 
 	$scope.show_error = false;
-	$http.get('../data/order'+$stateParams.orderId+'.json')
+	$http.get('../data/orderDetail'+$stateParams.orderId+'.json')
 	.success(function(data){
 		$scope.order = data;
 	})
@@ -194,7 +235,7 @@ angular.module('starter.controller' , [])
 	//    $ionicHistory.clearCache();
 	//    $ionicHistory.clearHistory();
 	// });
-	$http.get('../data/order'+$stateParams.orderId+'.json')
+	$http.get('../data/orderDetail'+$stateParams.orderId+'.json')
 	.success(function(data){
 		$scope.order = data;
 	})
@@ -208,12 +249,13 @@ angular.module('starter.controller' , [])
 .controller('LogisTrackCtrl', ['$scope','$http','$stateParams', function($scope, $http,$stateParams){
 	$http.get("../data/transit_step.json")
 	.success(function(data){
-		$scope.transit = data;		
+		$scope.transit = data;
+		$scope.thisOrder = data.orderInfo;	
 	})
-	$http.get("../data/order"+$stateParams.orderId+".json")
-	.success(function(data){
-		$scope.thisOrder = data;
-	})
+	// $http.get("../data/orderDetail"+$stateParams.orderId+".json")
+	// .success(function(data){
+	// 	$scope.thisOrder = data;
+	// })
 }])
 .controller('tabsCtrl', function($scope, $rootScope, $state) {
 	$rootScope.$on('$ionicView.beforeEnter', function() {
@@ -230,9 +272,11 @@ angular.module('starter.controller' , [])
 	$scope.logout = function(){
 		promise.then(function(data){
 			data.login = false;
-			$state.go("home");
-			window.location.reload();
-			console.log($ionicHistory)
+			$state.go("supplier.home");
+			$ionicHistory.clearHistory()
+			$ionicHistory.clearCache()
+			// window.location.reload();
+			// console.log($ionicHistory)
 		})		
 	}
 }])

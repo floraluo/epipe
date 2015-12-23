@@ -40,16 +40,24 @@ body{
 	background-size: cover;
 }
 .supplier{
+	// register.html
 	.item-img {
-		padding-top: 10px;
-		padding-bottom: 10px;
-		&>div{
-			float: left;
-			padding-top: 5px;
-			width: 26%;
-			margin-left: 5.5%;
+		>div {
+			padding: 10px;
+			text-align: center
 		}
 	}
+	// .item-img {
+	// 	padding-top: 10px;
+	// 	padding-bottom: 10px;
+	// 	&>div{
+	// 		float: left;
+	// 		padding-top: 5px;
+	// 		width: 26%;
+	// 		margin-left: 5.5%;
+	// 	}
+	// }
+
 	.top-icon{	
 		position: relative;
 		height:76px;
@@ -189,7 +197,7 @@ body{
 				left: 50%;
 				top: 50%;
 				transform: translate(-50%,-100%);
-				font-size: 46px;
+				font-size: 38px;
 				color: #4ed7bb;
 			}
 			>.merchant{

@@ -1,6 +1,6 @@
 <ion-view view-title="采购单">
 	<ion-content class="scroll-bg order-list">
-		<ion-refresher snipper="ios-small" on-refresh="displayOrderList()" pulling-text="下拉更新订单列表...">
+		<ion-refresher snipper="ios-small" on-refresh="reLoadOrderList()" pulling-text="下拉更新订单列表...">
 		</ion-refresher>		
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
 			<div class="item item-text-wrap order-info">

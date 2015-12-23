@@ -1,5 +1,6 @@
 <ion-view view-title="注册供应商">
 	<ion-content class="padding scroll-bg">
+	<div class="top-icon"><i class="ion-ios-personadd-outline"></i></div>
 	<form name="register" ng-submit="supplierRegiste(register)" novalidate>
 		<div class="list list-insert card card-round">
 			<label class="item item-input">
@@ -57,10 +58,10 @@
 			</div> -->
 
 			<div class="item">
-				<button class="button button-full button-balanced  button-round" ng-disabled="!ready" select-img>上传证件</button>
+				<button class="button button-full button-balanced  button-round" ng-disabled="!ready" select-img type="button">上传证件</button>
 			</div>
 			<div class="item-img clearfix" ng-hide="userRegisInfo.myCredentials==''">
-				<div ng-repeat='img in userRegisInfo.myCredentials track by $index'><img ng-src="{{img}}" alt="" width="100%"></div>
+				<div ng-repeat='img in userRegisInfo.myCredentials track by $index'><img ng-src="{{img}}" on-hold="onHoldImg($index)"></div>
 			</div>
 			<div class="item">
 				<button class="button button-full button-balanced button-round" type="submit">注册</button>

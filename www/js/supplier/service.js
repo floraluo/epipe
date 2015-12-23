@@ -1,4 +1,7 @@
 angular.module('starter.service' , [])
+// .factory('orderList',['$q', '$http', function($q, $http){
+	
+// }])
 .factory('supplier', ['$q', '$http', function($q, $http){
 	// interface
     var supplier = {
