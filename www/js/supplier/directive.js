@@ -18,15 +18,16 @@ angular.module('starter.directive' , [])
 .directive('hideTabs', ['$rootScope',function($rootScope){
 	return {
 		restrict: "A",
+		scope: {},
 		link: function(scope, element, attr){
 			if(element[0].nodeName == "INPUT"){
-				// element.bind('focus', function(){
+				// element.bind('click', function(){
 				// 	$rootScope.hideTabs = true;
-				// 	console.log(attr.index + "focus  "+ $rootScope.hideTabs)
+				// 	// console.log(attr.index + "focus  "+ $rootScope.hideTabs)
 				// });
 				// element.bind('blur', function(){
 				// 	$rootScope.hideTabs = false;
-				// 	console.log(attr.index + "blur  "+ $rootScope.hideTabs)
+				// 	// console.log(attr.index + "blur  "+ $rootScope.hideTabs)
 				// })
 			}else{
 				scope.$watch(attr.hideTabs, function(value){

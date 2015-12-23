@@ -39,6 +39,13 @@ body{
 	background: url('../img/bg.png') no-repeat center center fixed;
 	background-size: cover;
 }
+.keyboard-open .tab-nav.tabs {
+	display: none;
+}
+.keyboard-open .hide-tabs .has-tabs{
+  bottom: 0;
+}
+
 .supplier{
 	// register.html
 	.item-img {
