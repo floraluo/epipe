@@ -72,8 +72,8 @@ angular.module('starter.directive' , [])
 			element.bind('click', function(){
 				var hideSheet = $ionicActionSheet.show({
 					buttons: [
-						{text: '拍照'},
-						{text: '从图库选择'}
+						{text: '<i class="icon ion-android-camera positive"></i>拍照'},
+						{text: '<i class="icon ion-android-image royal"></i>从图库选择'}
 					],
 					buttonClicked: function(index){
 						if(index == 0){
