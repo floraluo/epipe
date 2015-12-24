@@ -14,7 +14,7 @@
 			</div>
 
 			<label class="item item-input">
-				<input type="text" name="tel" placeholder="电话" ng-model='userRegisInfo.tel' required ng-pattern="/((\d{11})|^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}(-\d{1,4})?$)/"><i></i>
+				<input type="text" name="tel" placeholder="电话" ng-model='userRegisInfo.tel' required ng-pattern="/(^(\d{11})$|^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}(-\d{1,4})?$)/"><i></i>
 			</label>
 			<div class="padding" ng-show="show_error && register.tel.$error.required">
 				<span class="error">电话号码不能为空!</span>

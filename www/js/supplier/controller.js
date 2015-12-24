@@ -100,8 +100,8 @@ angular.module('starter.controller' , [])
 		if($rootScope.appReady.status) $scope.ready = true;
 	});
 	$scope.supplierRegiste = function(myform){
+		$scope.show_error = true;
 		if(myform.$dirty){
-			$scope.show_error = true;
 			if(myform.$valid){
 				alert("提交成功！");
 
@@ -113,12 +113,26 @@ angular.module('starter.controller' , [])
 	}
 }])
 // 个人中心
-.controller('personalCtrl',['$scope', '$http', 'supplier' ,function($scope, $http, supplier){
+.controller('personalCtrl',['$scope', '$http','$state', 'supplier' ,function($scope, $http, $state, supplier){
 	var promise = supplier.getSupplierInfo();
 	promise.then(function(data){
 		$scope.supplier = data;
 	}, function(data){
 	})
+
+	$scope.show_error = false;
+	$scope.supplierModPerInfo = function(myform){		
+		$scope.show_error = true;
+		if(myform.$valid){
+			if(myform.$dirty){
+				alert("修改成功！");					
+			}
+
+			console.log($scope.userRegisInfo);
+			$state.go("supplier.personal");
+			// window.location.reload();
+		}
+	}
 }])
 // 发布关键字
 .controller('releaseCtrl', ['$scope', '$timeout', function($scope, $timeout){
@@ -132,6 +146,7 @@ angular.module('starter.controller' , [])
 		console.log($scope.keywords);
 	}
 }])
+
 // 订单列表
 .controller('orderListCtrl', ['$scope', 'order', '$state', '$stateParams', '$ionicPopup','$http',
  function($scope, order, $state, $stateParams,$ionicPopup, $http){

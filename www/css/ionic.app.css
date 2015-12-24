@@ -10857,7 +10857,7 @@ body {
   font-family: "Microsoft YaHei",SimHei,Arial,sans-serif;
 }
 
-.ng-dirty .error {
+form .error {
   color: red;
 }
 
