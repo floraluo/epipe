@@ -28,7 +28,7 @@ angular.module('starter', ['ionic','ngCordova', 'starter.controller', 'starter.d
   });
 })
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider){
-  $ionicConfigProvider.tabs.position('bottom').style('standard');
+  // $ionicConfigProvider.tabs.position('bottom').style('standard');
   $urlRouterProvider.otherwise('supplier/home');
   // $urlRouterProvider.otherwise('supplier/register');
 

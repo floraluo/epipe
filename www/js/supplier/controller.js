@@ -33,6 +33,18 @@ angular.module('starter.controller' , [])
 			};
 		})		
 	}
+
+	var i , j, txt='';
+	for (i = 1; i<27; i++){
+		for (j = 1; j<4 ; j++){
+			if (i<10) {
+				txt += 'http://mp3.en8848.com/zhuo-bian-mei-guo/u0'+i+'-'+j+'.lrc'
+			}else {
+				txt += 'http://mp3.en8848.com/zhuo-bian-mei-guo/u'+i+'-'+j+'.lrc'
+			}
+		}
+	}
+	$scope.txt = txt;
 }])
 .controller('loginCtrl', ['$scope','$state','$ionicBackdrop','$ionicLoading', 'supplier', 
 	function($scope, $state,$ionicBackdrop,$ionicLoading, supplier){
