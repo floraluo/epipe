@@ -1,12 +1,12 @@
-<!-- <ion-view view-title="我要报价" hide-tabs="true"> -->
-<ion-view view-title="我要报价">
+<ion-view view-title="我要报价" hide-tabs="true">
+<!-- <ion-view view-title="我要报价"> -->
 	<ion-content class="scroll-bg quotation">
 		<form name="quoForm" ng-submit="quotation(quoForm)" novalidate>	
 			<div class="order-info-warp">
 				<i class="button button-icon icon ion-ios-person-outline"></i>
 				<div class="order-info">
 					<div class="name">{{order.productName}}</div>
-					<div class="small amount">{{$root.hideTabs}}数量：{{order.productAmount}}吨</div>
+					<div class="small amount">数量：{{order.productAmount}}吨</div>
 					<div class="small date">{{order.date}}</div>
 				</div>
 			</div>
