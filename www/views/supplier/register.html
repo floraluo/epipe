@@ -4,7 +4,7 @@
 	<form name="register" ng-submit="supplierRegiste(register)" novalidate>
 		<div class="list list-insert card card-round">
 			<label class="item item-input">
-				<input type="email" name="email" placeholder="邮箱" ng-model='userRegisInfo.email' required><i></i>
+				<input type="email" name="email" placeholder="邮箱" ng-model='userRegisInfo.email' ng-blur='supplierCheckEmail(userRegisInfo.email)' required><i></i>
 			</label>
 			<div class="padding" ng-show="show_error && register.email.$error.required">
 				<span class="error">邮箱地址不能为空！</span>
