@@ -20,7 +20,13 @@ angular.module('starter.directive' , [])
 		restrict: "A",
 		scope: {},
 		link: function(scope, element, attr){
-			if(element[0].nodeName == "INPUT"){
+			scope.$watch(attr.hideTabs, function(value){
+				$rootScope.main.hideTabs = value;
+			});
+			scope.$on('$destroy', function() {
+				$rootScope.main.hideTabs = false;
+			});
+			// if(element[0].nodeName == "INPUT"){
 				// element.bind('click', function(){
 				// 	$rootScope.hideTabs = true;
 				// 	// console.log(attr.index + "focus  "+ $rootScope.hideTabs)
@@ -29,14 +35,14 @@ angular.module('starter.directive' , [])
 				// 	$rootScope.hideTabs = false;
 				// 	// console.log(attr.index + "blur  "+ $rootScope.hideTabs)
 				// })
-			}else{
-				scope.$watch(attr.hideTabs, function(value){
-	                $rootScope.hideTabs = value;
-	            });
-	            scope.$on('$destroy', function() {
-	                $rootScope.hideTabs = false;
-	            });				
-			}
+			// }else{
+				// scope.$watch(attr.hideTabs, function(value){
+				// 	$rootScope.hideTabs = value;
+				// });
+				// scope.$on('$destroy', function() {
+				// 	$rootScope.hideTabs = false;
+				// });
+			// }
 		}
 	}
 }])

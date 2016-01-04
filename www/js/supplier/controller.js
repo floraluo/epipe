@@ -1,18 +1,27 @@
 angular.module('starter.controller' , [])
 
-.controller('SupplierCtrl', ['$rootScope', '$scope', '$state','$ionicHistory', function($rootScope, $scope, $state,$ionicHistory){
+.controller('SupplierCtrl', ['$rootScope', '$scope', '$state','$ionicHistory', '$ionicTabsDelegate',
+			 function($rootScope, $scope, $state,$ionicHistory, $ionicTabsDelegate){
 
 	$rootScope.myGoBack = function(){
-		if($ionicHistory.viewHistory().backView.stateName == 'supplier.quotation'){
+		var backViewName = $ionicHistory.viewHistory().backView.stateName;
+		if( backViewName == 'supplier.quotation'){
 			$rootScope.$ionicGoBack (-2)
 			window.location.reload();
 		}
-		$rootScope.$ionicGoBack (-1)
+
+		if(backViewName != 'supplier.logisticsTracking'){
+			$ionicTabsDelegate.showBar(true);
+		}
+		// $rootScope.$ionicGoBack (-1)
+		$ionicHistory.goBack();
 	}
-	$rootScope.hideTabs = false;
-	$rootScope.sideMunus = true;
+	// $rootScope.sideMunus = true;
 	$rootScope.main = {};
+	// 是否滑动内容区域打开side menu
 	$rootScope.main.dragContent = true;
+	// 是否隐藏tabs
+	$rootScope.main.hideTabs = false;
 }])
 .controller('homeCtrl', ['$scope', '$rootScope', '$state','$stateParams', '$location', 'supplier', '$ionicHistory',
 	function($scope, $rootScope, $state,$stateParams, $location, supplier, $ionicHistory){
@@ -21,7 +30,7 @@ angular.module('starter.controller' , [])
 	// }else{
 	// 	$scope.href = "#/login";
 	// };
-	// 欢迎页，登录页，注册页隐藏sidemenu
+	// 欢迎页，登录页，注册页禁用滑动内容打开sidemenu
 	$rootScope.main.dragContent = false;
 
 	$ionicHistory.nextViewOptions({
@@ -206,14 +215,6 @@ angular.module('starter.controller' , [])
 			.error(function(){
 
 			})
-			// promise.then(function(data){
-			// 	$scope.amount ++
-			// 	$scope.order.content = $scope.order.content.concat(data);
-			// 	// $scope.order = data;
-			// 	$scope.$broadcast('scroll.infiniteScrollComplete');
-			// },function(data){
-			// 	console.log(data);
-			// })
 		}else{
 			$scope.order.canBeLoaded = false;
 			$ionicPopup.alert({
@@ -223,9 +224,11 @@ angular.module('starter.controller' , [])
 	}
 }])
 // 报价
-.controller('quotationCtrl', ['$scope','$http', '$state', '$stateParams','$ionicHistory', 'order', 
-	function($scope, $http, $state, $stateParams, $ionicHistory, order){
-
+.controller('quotationCtrl', ['$scope','$http', '$state', '$stateParams','$ionicHistory', '$ionicTabsDelegate', 'order', 
+	function($scope, $http, $state, $stateParams, $ionicHistory, $ionicTabsDelegate, order){
+	// 隐藏tabs
+	$ionicTabsDelegate.showBar(false);
+	// show_error：是否显示错误提示
 	$scope.show_error = false;
 	$http.get('../data/orderDetail'+$stateParams.orderId+'.json')
 	.success(function(data){
@@ -251,8 +254,10 @@ angular.module('starter.controller' , [])
 
 }])
 // 订单详情
-.controller('orderDetailCtrl', ['$scope','$http', '$state','$stateParams', '$ionicHistory','$location', 'order', 'supplier', 
-		function($scope, $http,$state, $stateParams, $ionicHistory, $location, order, supplier){
+.controller('orderDetailCtrl', ['$scope','$http', '$state','$stateParams', '$ionicHistory','$location', '$ionicTabsDelegate', 'order', 'supplier', 
+		function($scope, $http,$state, $stateParams, $ionicHistory, $location, $ionicTabsDelegate, order, supplier){
+	// 隐藏tabs
+	$ionicTabsDelegate.showBar(false);
 	// $scope.order = order[$stateParams.orderId]
 	// $ionicHistory.goBack(-1);
 	// $scope.$on("$ionicView.enter", function () {
@@ -270,7 +275,11 @@ angular.module('starter.controller' , [])
 		// $scope.supplier = 
 	})
 }])
-.controller('LogisTrackCtrl', ['$scope','$http','$stateParams', function($scope, $http,$stateParams){
+// 物流跟踪
+.controller('LogisTrackCtrl', ['$scope','$http','$stateParams', '$ionicTabsDelegate', function($scope, $http,$stateParams, $ionicTabsDelegate){
+	// 隐藏tabs
+	$ionicTabsDelegate.showBar(false);
+
 	$http.get("../data/transit_step.json")
 	.success(function(data){
 		$scope.transit = data;
@@ -284,11 +293,11 @@ angular.module('starter.controller' , [])
 .controller('tabsCtrl', function($scope, $rootScope, $state) {
 	$rootScope.$on('$ionicView.beforeEnter', function() {
 
-		$rootScope.hideTabs = false;
+		// $rootScope.hideTabs = false;
 
-		if ($state.current.name === 'tabs.events-create') {
-			$rootScope.hideTabs = true;
-    	}
+		// if ($state.current.name === 'tabs.events-create') {
+		// 	$rootScope.hideTabs = true;
+  //   	}
 	});
 })
 .controller('LogoutCtrl', ['$scope','$ionicHistory','$state' , 'supplier', function($scope, $ionicHistory,$state , supplier){

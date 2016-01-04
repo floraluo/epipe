@@ -39,7 +39,7 @@ form .error {
 }
 
 .scroll-bg {
-  background: url("../img/bg.png") no-repeat center center fixed;
+  background: url("../img/bg.png") no-repeat top center;
   background-size: cover;
 }
 .scroll-bg .pin {
