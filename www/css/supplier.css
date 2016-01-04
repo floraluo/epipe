@@ -105,6 +105,14 @@ form .error {
   text-align: center;
   color: #ff7a00;
 }
+.supplier .home img {
+  width: 100%;
+}
+.supplier .home .button-wrap {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
+}
 .supplier .release-keywords .item-button-plus {
   padding-top: 0;
   padding-bottom: 0;

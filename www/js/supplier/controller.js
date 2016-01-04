@@ -1,6 +1,7 @@
 angular.module('starter.controller' , [])
 
 .controller('SupplierCtrl', ['$rootScope', '$scope', '$state','$ionicHistory', function($rootScope, $scope, $state,$ionicHistory){
+
 	$rootScope.myGoBack = function(){
 		if($ionicHistory.viewHistory().backView.stateName == 'supplier.quotation'){
 			$rootScope.$ionicGoBack (-2)
@@ -9,17 +10,23 @@ angular.module('starter.controller' , [])
 		$rootScope.$ionicGoBack (-1)
 	}
 	$rootScope.hideTabs = false;
-	// $rootScope.keyboardOpen = false;
-	// window.addEventListener('native.keyboardshow', function(){
-	// 	$rootScope.keyboardOpen = true;
-	// });
+	$rootScope.sideMunus = true;
+	$rootScope.main = {};
+	$rootScope.main.dragContent = true;
 }])
-.controller('homeCtrl', ['$scope', '$state','$stateParams', '$location', 'supplier', function($scope, $state,$stateParams, $location, supplier){
+.controller('homeCtrl', ['$scope', '$rootScope', '$state','$stateParams', '$location', 'supplier', '$ionicHistory',
+	function($scope, $rootScope, $state,$stateParams, $location, supplier, $ionicHistory){
 	// if (supplier.login) {
 	// 	$scope.href = "#/supplier/release";
 	// }else{
 	// 	$scope.href = "#/login";
 	// };
+	// 欢迎页，登录页，注册页隐藏sidemenu
+	$rootScope.main.dragContent = false;
+
+	$ionicHistory.nextViewOptions({
+		disableBack: true
+	})
 	var promise = supplier.getSupplierInfo();
 	$scope.sale = function(){
 		promise.then(function(data){
@@ -34,8 +41,10 @@ angular.module('starter.controller' , [])
 		})		
 	}
 }])
-.controller('loginCtrl', ['$scope','$state','$ionicBackdrop','$ionicLoading', 'supplier', 
-	function($scope, $state,$ionicBackdrop,$ionicLoading, supplier){
+// 登录
+.controller('loginCtrl', ['$scope','$rootScope', '$state','$ionicBackdrop','$ionicLoading', 'supplier', 
+	function($scope, $rootScope, $state,$ionicBackdrop,$ionicLoading, supplier){
+	
 	var user = $scope.user = {
 		name: '',
 		password: ''
@@ -59,7 +68,7 @@ angular.module('starter.controller' , [])
 			promise.then(function(data){
 				$ionicBackdrop.release();
 				$ionicLoading.hide();
-				console.log(data)
+				// console.log(data)
 				if(data.registe == false){
 					$scope.supplier.registe=data.registe;
 					return;
@@ -71,9 +80,9 @@ angular.module('starter.controller' , [])
 					$scope.supplier.validPassword=false
 				}
 			},function(data){
-				console.log(data)
+				// console.log(data)
 			})
-			console.log($scope.user)
+			// console.log($scope.user)
 		}
 	}
 	$scope.pathToRegis = function(){
@@ -84,7 +93,6 @@ angular.module('starter.controller' , [])
 // 注册
 .controller('registerCtrl', ['$scope', '$rootScope', '$state', '$cordovaCamera','$ionicActionSheet',
 	function($scope, $rootScope, $state, $cordovaCamera,$ionicActionSheet){
-
 	$scope.userRegisInfo = {
 		email: '',
 		tel: '',
@@ -135,7 +143,8 @@ angular.module('starter.controller' , [])
 	}
 }])
 // 发布关键字
-.controller('releaseCtrl', ['$scope', '$timeout', function($scope, $timeout){
+.controller('releaseCtrl', ['$scope', '$rootScope', '$timeout', function($scope, $rootScope, $timeout){
+	$rootScope.main.dragContent = true;
 	$scope.keywords=["", "", ""];
 	$scope.addKeywords = function(){
 		$timeout(function(){
@@ -295,3 +304,14 @@ angular.module('starter.controller' , [])
 		})		
 	}
 }])
+// .controller('RootCtrl', ['$scope','$ionicHistory', function($scope,$ionicHistory){
+// 	$scope.side={
+// 		sideMunus: true
+// 	}
+// 	var currentState = $ionicHistory.viewHistory().stateName;
+// 	console.log("ccccc: "+$ionicHistory.viewHistory());
+// 	if( currentState == 'supplier.login' || currentState == 'supplier.register'){
+// 		$scope.side.sideMunus = false;
+// 		console.log('login')
+// 	}
+// }])

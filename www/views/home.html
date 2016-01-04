@@ -1,19 +1,18 @@
-<ion-view view-title="home">
-	<ion-content class="scroll-bg padding">
-		<ion-slide-box on-slide-changed="slideHasChanged($index)" does-continue="true" show-pager="false" auto-play="true" slide-interval="2000" active-slide="1">
+<ion-view hide-nav-bar="true" cache-view="false">
+	<ion-content class="scroll-bg home">
+		<ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" slide-interval="2000" active-slide="0">
 			<ion-slide>
-				<div class="logo"><img src="img/logo.jpg" alt=""></div>
-				<a class="button button-block button-round button-energized button-purchase">我要采购</a>
+				<a><img src="img/welcome1.jpg" alt=""></a>
+				<div class="button-wrap padding">
+					<a class="button button-block button-round button-balanced button-sale" ng-click="sale()">立即体验</a>					
+				</div>
 			</ion-slide>
-			<ion-slide>
-				<div class="logo"><img src="img/logo.jpg" alt=""></div>
-				<a class="button button-block button-round button-balanced button-sale" ng-click="sale()">我要卖货</a>
-			</ion-slide>
+			<!-- <ion-slide>
+				<a><img src="img/welcome1.jpg" alt=""></a>
+				<div class="button-wrap padding">
+					<a class="button button-block button-round button-balanced button-sale" ng-click="sale()">立即体验</a>					
+				</div>
+			</ion-slide> -->
 		</ion-slide-box>
-		<!-- <div class="logo"><img src="img/logo.jpg" alt=""></div>
-		<div class="button-group padding">
-			<a class="button button-full button-purchase">我要采购</a>
-			<a class="button button-full button-sale" ng-click="sale()">我要卖货</a>
-		</div> -->
 	</ion-content>
 </ion-view>

@@ -124,6 +124,18 @@ form{
 		text-align: center;
 		color: #ff7a00;
 	}
+	// home page
+	.home{
+		img{
+			width: 100%
+		}
+		.button-wrap{
+			position: absolute;
+			bottom: 100px;
+			width: 100%;
+		}
+	}
+
 	.release-keywords{
 		.item-button-plus{
 			padding-top: 0;
