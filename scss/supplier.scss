@@ -44,6 +44,19 @@ form{
 .scroll-bg{
 	background: url('../img/bg.png') no-repeat center center fixed;
 	background-size: cover;
+	.pin{
+		position: absolute;
+		z-index: 99;
+		left: 6px;
+		top: -9px;
+		display: inline-block;
+		width: 50px;
+		height: 100px;
+		background: url('../img/pin.png') no-repeat;
+		+.card{
+			@include margin-horizontal(15px);
+		}
+	}
 }
 .keyboard-open .tab-nav.tabs {
 	display: none;
@@ -118,7 +131,7 @@ form{
 		}
 	}
 	.diamonds-bg{
-		background: url('../img/diamonds_bg.jpg') repeat;		
+		background: url('../img/diamonds_bg.jpg') repeat;
 	}
 	.card>.item-divider{
 		text-align: center;
