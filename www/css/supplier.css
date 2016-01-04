@@ -39,8 +39,22 @@ form .error {
 }
 
 .scroll-bg {
-  background: url("../img/bg.png") no-repeat center center fixed;
+  background: url("../img/bg.png") no-repeat top center;
   background-size: cover;
+}
+.scroll-bg .pin {
+  position: absolute;
+  z-index: 99;
+  left: 6px;
+  top: -9px;
+  display: inline-block;
+  width: 50px;
+  height: 100px;
+  background: url("../img/pin.png") no-repeat;
+}
+.scroll-bg .pin + .card {
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .keyboard-open .tab-nav.tabs {
@@ -104,6 +118,14 @@ form .error {
 .supplier .card > .item-divider {
   text-align: center;
   color: #ff7a00;
+}
+.supplier .home img {
+  width: 100%;
+}
+.supplier .home .button-wrap {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
 }
 .supplier .release-keywords .item-button-plus {
   padding-top: 0;

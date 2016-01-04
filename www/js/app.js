@@ -58,6 +58,7 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
     }
   })
   .state('supplier.login', {
+    cache: false,
     url: '/login',
     views: {
       'main': {
