@@ -23,25 +23,11 @@ angular.module('starter.controller' , [])
 	// 是否隐藏tabs
 	$rootScope.main.hideTabs = false;
 }])
-    .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$location', 'supplier', function($scope, $state, $stateParams, $location, supplier) {
-        // if (supplier.login) {
-        // 	$scope.href = "#/supplier/release";
-        // }else{
-        // 	$scope.href = "#/login";
-        // };
-        var promise = supplier.getSupplierInfo();
-        $scope.sale = function() {
-            promise.then(function(data) {
-                if (data.login) {
-                    $scope.href = "#/supplier/release";
-                    $state.go("supplier.release");
-                } else {
-                    $state.go("supplier.login");
-                    // window.location.reload();
-
-                };
-            })
-        }
+    .controller('homeCtrl', ['$scope','$ionicHistory', function($scope, $ionicHistory) {
+    	// 禁用下一个页面返回按钮
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});
     }])
 .controller('loginCtrl', ['$scope',  'CONFIG', '$ionicPopup', '$cookieStore', 'httpService', '$state', '$ionicBackdrop', '$ionicLoading', 'supplier',
         function($scope, CONFIG, $ionicPopup, $cookieStore, httpService, $state, $ionicBackdrop, $ionicLoading, supplier) {
