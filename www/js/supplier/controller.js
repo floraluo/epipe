@@ -23,7 +23,10 @@ angular.module('starter.controller' , [])
 	// 是否隐藏tabs
 	$rootScope.main.hideTabs = false;
 }])
-    .controller('homeCtrl', ['$scope','$ionicHistory', function($scope, $ionicHistory) {
+    .controller('homeCtrl', ['$scope','$ionicHistory','$rootScope', function($scope, $ionicHistory, $rootScope) {
+    	// 禁用登录、注册页滑动打开侧边栏
+    	$rootScope.main.dragContent = false;
+    	
     	// 禁用下一个页面返回按钮
 		$ionicHistory.nextViewOptions({
 			disableBack: true
