@@ -6,7 +6,8 @@ angular.module('starter.controller' , [])
 	$rootScope.myGoBack = function(){
 		var backViewName = $ionicHistory.viewHistory().backView.stateName;
 		if( backViewName == 'supplier.quotation'){
-			$rootScope.$ionicGoBack (-2)
+			// $rootScope.$ionicGoBack (-2)
+			$ionicHistory.goBack(-2);
 			window.location.reload();
 		}
 
