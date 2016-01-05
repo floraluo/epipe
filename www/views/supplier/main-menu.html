@@ -2,11 +2,11 @@
 <ion-side-menus>
 	<ion-side-menu side="right">
 		<ion-header-bar class="has-tabs-top" align-title="left">
-	      <a menu-close href="#/epipe/home"><h1 class="title"><img src="img/ionic.png" alt="" width="35">Flora</h1></a>
+	      <a menu-close><h1 class="title"><img src="img/ionic.png" alt="" width="35">采购宝</h1></a>
 	    </ion-header-bar>
 		<ion-content>
 			<ion-list>
-				<ion-item menu-close href="#/home" ng-controller="LogoutCtrl" ng-click="logout()">退出</ion-item>
+				<ion-item menu-close ui-sref="supplier.home" ng-controller="LogoutCtrl" ng-click="logout()">退出登录</ion-item>
 			</ion-list>
 		</ion-content>
 	</ion-side-menu>

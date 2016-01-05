@@ -26,7 +26,7 @@ angular.module('starter.controller' , [])
     .controller('homeCtrl', ['$scope','$ionicHistory','$rootScope', function($scope, $ionicHistory, $rootScope) {
     	// 禁用登录、注册页滑动打开侧边栏
     	$rootScope.main.dragContent = false;
-    	
+
     	// 禁用下一个页面返回按钮
 		$ionicHistory.nextViewOptions({
 			disableBack: true
@@ -350,12 +350,12 @@ angular.module('starter.controller' , [])
   //   	}
 	});
 })
-.controller('LogoutCtrl', ['$scope','$ionicHistory','$state' , 'supplier', function($scope, $ionicHistory,$state , supplier){
+.controller('LogoutCtrl', ['$scope','$ionicHistory', 'supplier', function($scope, $ionicHistory, supplier){
 	var promise = supplier.getSupplierInfo();
 	$scope.logout = function(){
 		promise.then(function(data){
 			data.login = false;
-			$state.go("supplier.home");
+			// $state.go("supplier.home");
 			$ionicHistory.clearHistory()
 			$ionicHistory.clearCache()
 			// window.location.reload();
