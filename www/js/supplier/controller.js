@@ -33,11 +33,13 @@ angular.module('starter.controller' , [])
 			disableBack: true
 		});
     }])
-.controller('loginCtrl', ['$scope',  'CONFIG', '$ionicPopup', '$cookieStore', 'httpService', '$state', '$ionicBackdrop', '$ionicLoading', 'supplier',
-        function($scope, CONFIG, $ionicPopup, $cookieStore, httpService, $state, $ionicBackdrop, $ionicLoading, supplier) {
+.controller('loginCtrl', ['$scope', '$rootScope', 'CONFIG', '$ionicPopup', '$cookieStore', 'httpService', '$state', '$ionicBackdrop', '$ionicLoading', 'supplier',
+        function($scope,$rootScope, CONFIG, $ionicPopup, $cookieStore, httpService, $state, $ionicBackdrop, $ionicLoading, supplier) {
+        	// 禁止滑动打开侧边栏
+        	$rootScope.main.dragContent = false;
             var user = $scope.user = {
                 name: '',
-                password: '111111'
+                password: ''
             };
             // $scope.validPassword=false;
             $scope.supplier = {
