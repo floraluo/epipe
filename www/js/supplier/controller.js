@@ -36,32 +36,34 @@ angular.module('starter.controller' , [])
 .controller('loginCtrl', ['$scope',  'CONFIG', '$ionicPopup', '$cookieStore', 'httpService', '$state', '$ionicBackdrop', '$ionicLoading', 'supplier',
         function($scope, CONFIG, $ionicPopup, $cookieStore, httpService, $state, $ionicBackdrop, $ionicLoading, supplier) {
             var user = $scope.user = {
-                name: 'test3@test.com',
+                name: '',
                 password: '111111'
             };
             // $scope.validPassword=false;
             $scope.supplier = {
-                registe: true,
+            	show_error: false,
+                noRegiste: false,
                 validPassword: true
             }
             $scope.changeValidPassword = function() {
                 $scope.validPassword = false;
             }
             $scope.supplierLogin = function(myform) {
+            	$scope.supplier.show_error = true;
                 if (myform.$valid) {
-
-
-                    httpService.post('/login', {
-                        user: $scope.user.name,
-                        password: $scope.user.password
+                    httpService.post('/user/login', {
+                        phone: $scope.user.name,
+                        password: $scope.user.password,
+                        userType: "供应商"
                     }).success(function(data) {
-                        console.log(data);
-                        if (data.success) {
+                        if (data.status) {
                             console.log('success');
                             window.localStorage.token = data.token;
                             $state.go("supplier.release");
                         } else {
-                            //alert("用户名或密码错误");
+                            // if(data.user == null){
+                            // 	$scope.supplier.noRegiste = true;
+                            // }
                             $ionicPopup.alert({
                                 template: "用户名或密码错误"
                             })
@@ -128,52 +130,84 @@ angular.module('starter.controller' , [])
         function($scope, $rootScope, $state, $cordovaCamera, $ionicActionSheet,httpService,$ionicPopup) {
 
             $scope.userRegisInfo = {
-                email: '',
-                tel: '',
-                company: '',
+            	userType: '供应商',
+                phone: '',
+                code: '',
                 password: '',
-                repassword: '',
-                myCredentials: []
+                // repassword: '',
+                userProfile: {
+                	company: ''
+                	// ,
+                	// myCredentials: []
+                }
             }
             $scope.show_error = false;
+            $scope.code_is_error = false;
             $scope.ready = false;
             $rootScope.$watch('appReady.status', function() {
                 // console.log('watch fired '+$rootScope.appReady.status);
                 if ($rootScope.appReady.status) $scope.ready = true;
             });
-            $scope.supplierCheckEmail = function(email) {
-                httpService.get("/register/supplier/checkemail/"+email).success(function(data) {
-                    console.log(data);
-                    if (data.success) {
-                        console.log('success');
-                    } else {
+            $scope.supplierCheckPhone = function(phone){
+            	httpService.get("/user/checkPhone/" + phone).success(function(data){
+            		if(!data.status) {
+            			console.log('success');
+            		}else {
+            			$ionicPopup.alert({
+            				template: "电话号码已存在"
+            			})
+            		}
+            	})
+            }
+            // $scope.supplierCheckEmail = function(email) {
+            //     httpService.get("/register/supplier/checkemail/"+email).success(function(data) {
+            //         console.log(data);
+            //         if (data.success) {
+            //             console.log('success');
+            //         } else {
                         
-                        $ionicPopup.alert({
-                            template: "邮箱已存在"
-                        })
-                    }
-                });
-            };
+            //             $ionicPopup.alert({
+            //                 template: "邮箱已存在"
+            //             })
+            //         }
+            //     });
+            // };
+
+            // 获取验证码
+            $scope.fetchCaptcha = function(){
+            	httpService.post("/user/sendPhoneToken",{
+            		phone: $scope.userRegisInfo.phone
+            	}).success(function(data){
+            		console.log(data)
+            		$scope.userRegisInfo.code=$scope.code = 201601;
+            	})
+            }
+
+            // 验证验证码
+            $scope.verifyCode = function(code){
+            	// 判断验证码是否正确
+                if($scope.userRegisInfo.code != $scope.captch){
+                	$scope.code_is_error = true;
+                }else{
+                	$scope.code_is_error = false;
+                }
+            }
             $scope.supplierRegiste = function(myform) {
                 $scope.show_error = true;
                 if (myform.$dirty) {
-                    if (myform.$valid) {
-                        
+                    if (myform.$valid) {                      
 
-                        console.log($scope.userRegisInfo);
-                        httpService.post("/register/supplier", $scope.userRegisInfo).success(function(data) {
-                            console.log(data);
-                            if (data.success) {
-                                console.log('success');
-
+                        httpService.post("/user/regist", $scope.userRegisInfo).success(function(data) {
+                            if (data.status) {
                                 $state.go("supplier.login");
                             } else {                                
                                 $ionicPopup.alert({
-                                    template: "邮箱已存在"
+                                    template: data.errMsg
                                 })
                             }
                         });
 
+                        
 
                     }
                 }

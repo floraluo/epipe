@@ -3,7 +3,7 @@
 	<div class="top-icon"><i class="ion-ios-personadd-outline"></i></div>
 	<form name="register" ng-submit="supplierRegiste(register)" novalidate>
 		<div class="list list-insert card card-round">
-			<label class="item item-input">
+			<!-- <label class="item item-input">
 				<input type="email" name="email" placeholder="邮箱" ng-model='userRegisInfo.email' ng-blur='supplierCheckEmail(userRegisInfo.email)' required><i></i>
 			</label>
 			<div class="padding" ng-show="show_error && register.email.$error.required">
@@ -11,20 +11,20 @@
 			</div>
 			<div class="padding" ng-show="register.email.$error.email">
 				<span class="error">邮箱格式错误！</span>
-			</div>
+			</div> -->
 
 			<label class="item item-input">
-				<input type="text" name="tel" placeholder="电话" ng-model='userRegisInfo.tel' required ng-pattern="/(^(\d{11})$|^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}(-\d{1,4})?$)/"><i></i>
+				<input type="text" name="phone" placeholder="手机号码" ng-model='userRegisInfo.phone' ng-blur='supplierCheckPhone(userRegisInfo.phone)' required ng-pattern="/^\d{11}$/"><i></i>
 			</label>
-			<div class="padding" ng-show="show_error && register.tel.$error.required">
+			<div class="padding" ng-show="show_error && register.phone.$error.required">
 				<span class="error">电话号码不能为空!</span>
 			</div>
-			<div class="padding" ng-show="register.tel.$error.pattern">
+			<div class="padding" ng-show="register.phone.$error.pattern">
 				<span class="error">电话号码格式错误!</span>
 			</div>
 
 			<label class="item item-input">
-				<input type="text" name="company" placeholder="公司" ng-model='userRegisInfo.company' required><i></i>
+				<input type="text" name="company" placeholder="公司名称" ng-model='userRegisInfo.userProfile.company' required><i></i>
 			</label>
 			<div class="padding" ng-show="show_error && register.company.$error.required">
 				<span class="error">公司名称不能为空！</span>
@@ -44,10 +44,23 @@
 			</div>
 
 			<label class="item item-input">
-				<input name="rePassword" ng-model='userRegisInfo.repassword'  ng-minlength="6" ng-maxlength="20" required repeat="suPassword" type="password" placeholder="重复密码"><i></i>
+				<input name="rePassword" ng-model='repassword'  ng-minlength="6" ng-maxlength="20" required repeat="suPassword" type="password" placeholder="重复密码"><i></i>
 			</label>			
 			<div class="padding" ng-show="register.rePassword.$dirty  && register.rePassword.$error.repeat">
 				<span class="error">两次密码不一致</span>
+			</div>
+
+			<div class="item item-input-inset">
+				<label class="item-input-wrapper">
+					<input name="code" ng-model='userRegisInfo.code' type="text" placeholder="验证码">
+				</label>
+				<button class="button button-small button-balanced" ng-click="fetchCaptcha()" type="button">获取验证码</button>
+			</div>
+			<!-- <div class="padding" ng-show="show_error && register.code.$error.required">
+				<span class="error">验证码不能为空</span>
+			</div> -->
+			<div class="padding" ng-show="register.code.$dirty && code_is_error">
+				<span class="error">验证码不正确</span>
 			</div>
 
 			<!-- <div class="item">
@@ -57,12 +70,12 @@
 				<div ng-repeat='img in userRegisInfo.myCredentials track by $index'><img ng-src="{{img}}" alt="" width="100%"></div>
 			</div> -->
 
-			<div class="item">
+			<!-- <div class="item">
 				<button class="button button-full button-balanced  button-round" ng-disabled="!ready" select-img type="button">上传证件</button>
 			</div>
 			<div class="item-img clearfix" ng-hide="userRegisInfo.myCredentials==''">
 				<div ng-repeat='img in userRegisInfo.myCredentials track by $index'><img ng-src="{{img}}" on-hold="onHoldImg($index)"></div>
-			</div>
+			</div> -->
 			<div class="item">
 				<button class="button button-full button-balanced button-round" type="submit">注册</button>
 			</div>
