@@ -17,9 +17,16 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="item item-input-inset">
+				<label class="item-input-wrapper">
+					<input type="text" placeholder="请输入物流状态">
+				</label>
+				<button class="button button-small button-balanced">更新</button>
+			</div>
 			<div class="item item-body">
 				<div class="logistics-info-wrap">
-					<div class="end-state" ng-show="transit.isSuccess">你的包裹已被签收</div>
+					<div class="end-state" ng-show="transit.isSuccess">包裹已被采购商签收</div>
 					<div class="end-state" ng-show="!transit.isSuccess">你的包裹正在运输中，请耐心等待...</div>
 					<div class="logistics-info">
 						<div class="track-item" ng-repeat="t in transit.address">

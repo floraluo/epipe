@@ -33,101 +33,52 @@ angular.module('starter.controller' , [])
 			disableBack: true
 		});
     }])
-.controller('loginCtrl', ['$scope', '$rootScope', 'CONFIG', '$ionicPopup', '$cookieStore', 'httpService', '$state', '$ionicBackdrop', '$ionicLoading', 'supplier',
-        function($scope,$rootScope, CONFIG, $ionicPopup, $cookieStore, httpService, $state, $ionicBackdrop, $ionicLoading, supplier) {
-        	// 禁止滑动打开侧边栏
-        	$rootScope.main.dragContent = false;
-            var user = $scope.user = {
-                name: '',
-                password: ''
-            };
-            // $scope.validPassword=false;
-            $scope.supplier = {
-            	show_error: false,
-                noRegiste: false,
-                validPassword: true
-            }
-            $scope.changeValidPassword = function() {
-                $scope.validPassword = false;
-            }
-            $scope.supplierLogin = function(myform) {
-            	$scope.supplier.show_error = true;
-                if (myform.$valid) {
-                    httpService.post('/user/login', {
-                        phone: $scope.user.name,
-                        password: $scope.user.password,
-                        userType: "供应商"
-                    }).success(function(data) {
-                        if (data.status) {
-                            console.log('success');
-                            window.localStorage.token = data.token;
-                            $state.go("supplier.release");
-                        } else {
-                            // if(data.user == null){
-                            // 	$scope.supplier.noRegiste = true;
-                            // }
-                            $ionicPopup.alert({
-                                template: "用户名或密码错误"
-                            })
-                        }
-                    });
+    // 登录
+	.controller('loginCtrl', ['$scope', '$rootScope', '$ionicPopup', 'httpService', '$state', 
+		function($scope, $rootScope, $ionicPopup, httpService, $state) {
+		// 禁止滑动打开侧边栏
+		$rootScope.main.dragContent = false;
 
-                    /* $ionicBackdrop.retain();
-                     $ionicLoading.show({
-                         template: "<ion-spinner icon='ios' class='spinner spinner-ios '></ion-spinner>",
-                         noBackdrop: true
-                     });
+	    $scope.user = {
+	        name: '',
+	        password: ''
+	    };
 
-                     $http.post(CONFIG.host + '/login', {
-                             user: $scope.user.name,
-                             password: $scope.user.password
-                         })
-                         .success(function(data) {
-                             $ionicBackdrop.release();
-                             $ionicLoading.hide();
-                             console.log(data);
-                             if (data.success) {
+	    $scope.supplier = {
+	    	show_error: false
+	    	// ,
+	     //    noRegiste: false,
+	     //    validPassword: true
+	    }
+	    // $scope.changeValidPassword = function() {
+	    //     $scope.validPassword = false;
+	    // }
+	    $scope.supplierLogin = function(myform) {
+	    	$scope.supplier.show_error = true;
 
-                             } else {
-
-                             }
-
-
-                             $state.go("supplier.release");
-                         })
-                         .error(function() {
-                             $ionicBackdrop.release();
-                             $ionicLoading.hide();
-                         });*/
-
-                    /*var promise = supplier.getSupplierInfo();
-                    promise.then(function(data){
-                    	$ionicBackdrop.release();
-                    	$ionicLoading.hide();
-                    	console.log(data)
-                    	if(data.registe == false){
-                    		$scope.supplier.registe=data.registe;
-                    		return;
-                    	}
-                    	if(user.password == data.password){
-                    		alert("登录成功！")
-                    		$state.go("supplier.release");
-                    	}else {
-                    		$scope.supplier.validPassword=false
-                    	}
-                    },function(data){
-                    	console.log(data)
-                    })*/
-
-                }
-            }
-            $scope.pathToRegis = function() {
-                $state.go("supplier.register");
-                // window.location.reload();
-            }
-        }
-    ])
-// 注册
+	        if (myform.$valid) {
+	            httpService.post('/user/login', {
+	                phone: $scope.user.name,
+	                password: $scope.user.password,
+	                userType: "供应商"
+	            }).success(function(data) {
+	                if (data.status) {
+	                    console.log('success');
+	                    window.localStorage.token = data.token;
+	                    $state.go("supplier.release");
+	                } else {
+	                    // if(data.user == null){
+	                    // 	$scope.supplier.noRegiste = true;
+	                    // }
+	                    $ionicPopup.alert({
+	                        template: "用户名或密码错误"
+	                    })
+	                }
+	            });
+	        }
+	    }
+	}])
+	// 注册
     .controller('registerCtrl', ['$scope', '$rootScope', '$state', '$cordovaCamera', '$ionicActionSheet','httpService','$ionicPopup',
         function($scope, $rootScope, $state, $cordovaCamera, $ionicActionSheet,httpService,$ionicPopup) {
 
@@ -145,11 +96,13 @@ angular.module('starter.controller' , [])
             }
             $scope.show_error = false;
             $scope.code_is_error = false;
-            $scope.ready = false;
-            $rootScope.$watch('appReady.status', function() {
-                // console.log('watch fired '+$rootScope.appReady.status);
-                if ($rootScope.appReady.status) $scope.ready = true;
-            });
+
+            // $scope.ready = false;
+            // $rootScope.$watch('appReady.status', function() {
+            //     if ($rootScope.appReady.status) $scope.ready = true;
+            // });
+
+            // 检查手机号是否已注册
             $scope.supplierCheckPhone = function(phone){
             	httpService.get("/user/checkPhone/" + phone).success(function(data){
             		if(!data.status) {
@@ -161,19 +114,6 @@ angular.module('starter.controller' , [])
             		}
             	})
             }
-            // $scope.supplierCheckEmail = function(email) {
-            //     httpService.get("/register/supplier/checkemail/"+email).success(function(data) {
-            //         console.log(data);
-            //         if (data.success) {
-            //             console.log('success');
-            //         } else {
-                        
-            //             $ionicPopup.alert({
-            //                 template: "邮箱已存在"
-            //             })
-            //         }
-            //     });
-            // };
 
             // 获取验证码
             $scope.fetchCaptcha = function(){
@@ -208,9 +148,6 @@ angular.module('starter.controller' , [])
                                 })
                             }
                         });
-
-                        
-
                     }
                 }
             }

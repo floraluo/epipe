@@ -4,7 +4,7 @@
 		<div class="list list-inset card card-round">
 			<div class="item-input-group" id="releaseInputGroup" >
 				<label class="item item-input" ng-repeat="keyword in keywords track by $index">
-					<input type="text" placeholder="商品关键字(如:PVC)" ng-model='keywords[$index]' index={{$index}}>
+					<input type="text" placeholder="商品关键字" ng-model='keywords[$index]' index={{$index}}>
 				</label>			
 			</div>
 			<div class="item text-right item-button-plus">
@@ -12,6 +12,10 @@
 			</div>
 			<div class="item">
 				<a class="button button-full button-balanced button-round" ng-click="releaseKeywords()">发布</a>
+			</div>
+
+			<div class="item item-text-wrap">
+				<p>发布关键字说明：一个输入框填一个关键字（如：PVC）若有多个关键字点加号按钮增加关键字</p>
 			</div>
 		</div>
 	</ion-content>
