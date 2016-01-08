@@ -176,75 +176,109 @@ angular.module('starter.controller' , [])
 	}
 }])
 // 发布关键字
-.controller('releaseCtrl', ['$scope', '$rootScope', '$timeout', function($scope, $rootScope, $timeout){
+.controller('releaseCtrl', ['$scope','$ionicPopup', 'httpService', '$rootScope', '$timeout', function($scope, $ionicPopup, httpService, $rootScope, $timeout){
 	$rootScope.main.dragContent = true;
+
 	$scope.keywords=["", "", ""];
 	$scope.addKeywords = function(){
 		$timeout(function(){
 			$scope.keywords.push("")
 		},10)
 	};
+	$scope.cleanArray = function(array){
+		var newArray = [];
+		for(var i=0; i<array.length; i++){
+			if(array[i]){
+				newArray.push(array[i]);
+			}
+		}
+		return newArray;
+	}
 	$scope.releaseKeywords = function(){
-		console.log($scope.keywords);
+		var cleanArray = $scope.cleanArray($scope.keywords);
+		httpService.post("/keywords/setKeywords",{
+			keywords: cleanArray
+		})
+		.success(function(data){
+			if(data.status){
+				var keywordsStr = cleanArray.toString();
+				$ionicPopup.alert({
+					title: "发布成功",
+					template:keywordsStr
+				});
+				$scope.keywords=["", "", ""];
+			}
+		})
 	}
 }])
 
 // 订单列表
-.controller('orderListCtrl', ['$scope', 'order', '$state', '$stateParams', '$ionicPopup','$http',
- function($scope, order, $state, $stateParams,$ionicPopup, $http){
+.controller('orderListCtrl', ['$scope','httpService', 'order', '$state', '$stateParams', '$ionicPopup','$http',
+	function($scope, httpService, order, $state, $stateParams,$ionicPopup, $http){
 	$scope.order = {
-		canBeLoaded: true,
-		content: []
+		canBeLoaded: false,
+		content: [],
+		startTime: '',
+		endTime: '',
+		date: new Date().toISOString(),
+		count: 4
 	};
-	// 获取订单列表数据 x条
-	$http
-	.get("../data/orderList.json")
-	.success(function(data){
-		$scope.order.content = data;
-	})
-	.error(function(){
 
+	httpService.get("/order/getMyOldOrders/" + $scope.order.date +"/" +$scope.order.count)
+	.success(function(order){
+		if(order.status){
+			$scope.order.content = order.data;
+			$scope.order.endTime = order.data[0].createdOn;
+			$scope.order.startTime = order.data[$scope.order.count-1].createdOn;
+			$scope.order.canBeLoaded = true;
+		}
 	})
+	// $http
+	// .get("../data/orderList.json")
+	// .success(function(data){
+	// 	$scope.order.content = data;
+	// })
+	// .error(function(){
+
+	// })
 	$scope.amount = 0;//测试数据
 
 	// 刷新订单列表
-	$scope.reLoadOrderList = function(){
-		$http
-		.get("../data/orderList.json")
-		.success(function(data){
-			$scope.order.content = data;
+	$scope.loadNewOrderList = function(){
+		httpService.get("/order/getMyNewOrders/" + $scope.order.endTime)
+		.success(function(order){
+			console.log("length"+order.data.length)
+			if(order.status && order.data.length >0 ){
+				// $scope.order.content.unshift(order.data);
+				$scope.order.content = order.data.concat($scope.order.content)
+				$scope.order.endTime = order.data[0].createdOn;
+			}
+		})
+		.finally(function() {
+			// Stop the ion-refresher from spinning
 			$scope.$broadcast('scroll.refreshComplete');
-		})
-		.error(function(){
-
-		})
-		// promise.then(function(data){
-		// 	// $scope.order = $scope.order.concat(data);
-		// 	$scope.order.content = data;
-		// 	$scope.$broadcast('scroll.refreshComplete');
-		// },function(data){
-		// 	console.log(data);
-		// })
+		});
 	}
 	// 加载更多订单数据
 	$scope.loadMoreOrder = function(){
-		if($scope.amount < 2){
-			$http
-			.get("../data/orderList.json")
-			.success(function(data){
-				$scope.amount ++
-				$scope.order.content = $scope.order.content.concat(data);
+		// if($scope.order.canBeLoaded){			
+			httpService.get("/order/getMyOldOrders/" + $scope.order.startTime +"/" +$scope.order.count)
+			.success(function(order){
+				var len = order.data.length;
+				if(order.status && len >0 ){
+					// $scope.order.content.unshift(order.data);
+					$scope.order.content = $scope.order.content.concat(order.data)
+					$scope.order.startTime = order.data[len-1].createdOn;
+				}else {
+					$scope.order.canBeLoaded = false;
+					$ionicPopup.alert({
+						template: "没有更多数据了！"
+					})					
+				}
 				$scope.$broadcast('scroll.infiniteScrollComplete');
 			})
-			.error(function(){
-
-			})
-		}else{
-			$scope.order.canBeLoaded = false;
-			$ionicPopup.alert({
-				template: "没有更多数据了！"
-			})
-		}
+		// }else {
+		// }
 	}
 }])
 // 报价
