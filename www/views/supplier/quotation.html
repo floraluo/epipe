@@ -7,14 +7,20 @@
 				<div class="order-info">
 					<div class="name">{{order.productName}}</div>
 					<div class="small amount">数量：{{order.productAmount}}吨</div>
-					<div class="small date">{{order.date}}</div>
+					<div class="small date">{{order.createdOn  | date:'yyyy-MM-dd'}}</div>
 				</div>
 			</div>
 			<div class="list list-inset card card-round">
 				<label class="item item-input">
+					<span class="input-label quo-input-label" ng-hide="quo.isFirst">单价：</span>
 					<input name="unitPrice" type="text" placeholder="单价" ng-model='productQuo.unitPrice' ng-min="0" ng-keyup="canlTotalPrice(order.productAmount)" required><span class="placeholder-unit">元</span>
-					<!-- <input name="unitPrice" type="text" placeholder="单价" ng-model='productQuo.unitPrice' ng-pattern="/^([1-9]\d*)|(\d+\.\d{1,2})$/" required><span class="placeholder-unit">元</span> -->
+
+					<!-- <input name="unitPrice" type="text" placeholder="单价" ng-model='productQuo.unitPrice' ng-min="0" ng-pattern="/^0\.{1}\d{1,2}$|^[1-9][0-9]*\.{0,1}\d{0,2}$/"  ng-keyup="canlTotalPrice(order.productAmount)" required><span class="placeholder-unit">元</span> -->
+					
 				</label>
+				<!-- <div class="padding" ng-show="quoForm.unitPrice.$dirty && quoForm.unitPrice.$error.pattern">
+					<span class="error">单价格式错误</span>
+				</div> -->
 				<div class="padding" ng-show="quoForm.unitPrice.$dirty && quoForm.unitPrice.$error.required">
 					<span class="error">单价不能为空！</span>
 				</div>
@@ -22,10 +28,11 @@
 					<input type="text" placeholder="数量" ng-model='productQuo.orderNum'>
 				</label> -->
 				<label class="item item-input">
+					<span class="input-label quo-input-label" ng-hide="quo.isFirst">总价：</span>
 					<input type="text" placeholder="总价" ng-model='productQuo.totalPrice' required><span class="placeholder-unit">元</span>
 				</label>
 				<div class="item">
-					<button class="button button-full button-balanced button-round" type="submit">报价</button>
+					<button class="button button-full button-balanced button-round" type="submit">{{quo.btnText}}</button>
 				</div>
 			</div>
 		</form>

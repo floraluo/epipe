@@ -195,6 +195,9 @@ form .error {
   font-size: 1.6rem;
   color: #fe0000;
 }
+.supplier .quotation .quo-input-label {
+  width: auto;
+}
 .supplier .quotation .button-round {
   margin-top: 20%;
 }
