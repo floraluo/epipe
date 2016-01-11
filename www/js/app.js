@@ -97,12 +97,21 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
       }
     }
   })
-  .state('supplier.modifyPerInfo', {
-    url: '/modifyPerInfo',
+  .state('supplier.modifyProfile', {
+    url: '/modifyProfile',
     views: {
       'tabPersonalCenter': {
-        templateUrl: "views/supplier/modifyPerInfo.html",
+        templateUrl: "views/supplier/modify-profile.html",
         controller: 'personalCtrl'
+      }
+    }
+  })
+  .state('supplier.modifyPassword', {
+    url: '/modifyPassword',
+    views: {
+      'tabPersonalCenter': {
+        templateUrl: "views/supplier/modify-password.html",
+        controller: 'ModifyPasswordCtrl'
       }
     }
   })

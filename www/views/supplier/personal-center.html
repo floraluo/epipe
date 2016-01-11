@@ -2,7 +2,7 @@
 	<ion-content class="scroll-bg personal-center">
 		<div class="top-info">
 			<div class="my-portrait top-icon"><i class="ion-ios-person-outline"></i></div>
-			<div class="my-email">{{supplier.email}}</div>			
+			<!-- <div class="my-email">{{supplier.email}}</div>			 -->
 		</div>
 		<div class="diamonds-bg bottom-info">
 			<div class="list">
@@ -12,13 +12,16 @@
 				</div>
 				<div class="control-label info">
 					<span class="label">电话：</span>
-					<div class="value"><span class="num">{{supplier.tel}}</span></div>
+					<div class="value"><span class="num">{{supplier.phone}}</span></div>
 				</div>
-				<div class="control-label info">
+				<!-- <div class="control-label info">
 					<span class="label">邮箱：</span>
 					<div class="value"><span class="num">{{supplier.email}}</span></div>
+				</div> -->
+				<div class="text-right">
+					<i class="button-icon icon ion-compose" ui-sref="supplier.modifyProfile"></i>
+					<i class="button-icon icon ion-android-unlock" ui-sref="supplier.modifyPassword"></i>
 				</div>
-				<div class="text-right"><i class="button-icon icon ion-compose" ui-sref="supplier.modifyPerInfo"></i></div>
 			</div>			
 		</div>
 	</ion-content>

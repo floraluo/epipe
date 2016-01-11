@@ -79,8 +79,8 @@ angular.module('starter.controller' , [])
 	    }
 	}])
 	// 注册
-    .controller('registerCtrl', ['$scope', '$rootScope', '$state', '$cordovaCamera', '$ionicActionSheet','httpService','$ionicPopup',
-        function($scope, $rootScope, $state, $cordovaCamera, $ionicActionSheet,httpService,$ionicPopup) {
+    .controller('registerCtrl', ['$scope','$interval', '$rootScope', '$state', '$cordovaCamera', '$ionicActionSheet','httpService','$ionicPopup',
+        function($scope, $interval, $rootScope, $state, $cordovaCamera, $ionicActionSheet,httpService,$ionicPopup) {
 
             $scope.userRegisInfo = {
             	userType: '供应商',
@@ -96,6 +96,11 @@ angular.module('starter.controller' , [])
             }
             $scope.show_error = false;
             $scope.code_is_error = false;
+            $scope.captcha = {
+            	text: "获取验证码",
+            	disabled: false
+            };
+            $scope.interval = 40;
 
             // $scope.ready = false;
             // $rootScope.$watch('appReady.status', function() {
@@ -121,18 +126,41 @@ angular.module('starter.controller' , [])
             		phone: $scope.userRegisInfo.phone
             	}).success(function(data){
             		console.log(data)
-            		$scope.userRegisInfo.code=$scope.code = 201601;
+            		$scope.code = 201601;
+            		$scope.captcha = {
+        				disabled: true,
+        				text: $scope.interval+" 秒之后重新获取"
+        			}
+            		$scope.timer();
             	})
             }
 
             // 验证验证码
             $scope.verifyCode = function(code){
+            	console.log("userRegisInfo.code: "+ $scope.userRegisInfo.code +"     $scope.code: "+$scope.code )
             	// 判断验证码是否正确
-                if($scope.userRegisInfo.code != $scope.captch){
+                if($scope.userRegisInfo.code != $scope.code){
                 	$scope.code_is_error = true;
                 }else{
                 	$scope.code_is_error = false;
                 }
+            }
+
+            // 计时器
+            $scope.timer = function(){
+            	var time=$scope.interval,stopTime;
+            	function updateTime () {
+            		time--;
+            		$scope.captcha.text = time+" 秒之后重新获取";
+            		if(time == 0){
+            			$scope.captcha = {
+            				disabled: false,
+            				text: "获取验证码"
+            			}
+            			$interval.cancel(stopTime);
+            		}
+            	}
+            	stopTime = $interval(updateTime, 1000);
             }
             $scope.supplierRegiste = function(myform) {
                 $scope.show_error = true;
@@ -154,133 +182,201 @@ angular.module('starter.controller' , [])
         }
     ])
 // 个人中心
-.controller('personalCtrl',['$scope', '$http','$state', 'supplier' ,function($scope, $http, $state, supplier){
-	var promise = supplier.getSupplierInfo();
-	promise.then(function(data){
-		$scope.supplier = data;
-	}, function(data){
-	})
+.controller('personalCtrl',['$scope','$ionicPopup', '$rootScope', 'httpService','$state' ,
+	function($scope, $ionicPopup, $rootScope, httpService, $state){
+
+	$rootScope.$watch('appReady.status', function() {
+	    if ($rootScope.appReady.status) $scope.ready = true;
+	});
+
+	$scope.supplier = {
+    	userType: '供应商',
+        userProfile: {
+        	company: ''
+        }
+    }
+    $scope.$on('$ionicView.beforeEnter', function() {
+		httpService.get("/user/getProfile")
+		.success(function(data){
+			var profile = data.data;
+			$scope.supplier = {
+				company: profile.company,
+				phone: profile.phone
+			}
+		})
+	});
 
 	$scope.show_error = false;
+
 	$scope.supplierModPerInfo = function(myform){		
 		$scope.show_error = true;
 		if(myform.$valid){
+			
 			if(myform.$dirty){
-				alert("修改成功！");					
+				httpService.post("/user/changeProfile",$scope.supplier)
+				.success(function(data){
+					if(data.status){
+						var promise = $ionicPopup.alert({
+							template: "修改成功！",
+							okText: "确认"
+						})
+						promise.then(function(data){
+							if(data){
+								$state.go("supplier.personal");				
+							}
+						})
+					}
+				})
 			}
 
-			console.log($scope.userRegisInfo);
-			$state.go("supplier.personal");
 			// window.location.reload();
 		}
 	}
 }])
-// 发布关键字
-.controller('releaseCtrl', ['$scope','$ionicPopup', 'httpService', '$rootScope', '$timeout', function($scope, $ionicPopup, httpService, $rootScope, $timeout){
-	$rootScope.main.dragContent = true;
-
-	$scope.keywords=["", "", ""];
-	$scope.addKeywords = function(){
-		$timeout(function(){
-			$scope.keywords.push("")
-		},10)
-	};
-	$scope.cleanArray = function(array){
-		var newArray = [];
-		for(var i=0; i<array.length; i++){
-			if(array[i]){
-				newArray.push(array[i]);
+.controller('ModifyPasswordCtrl', ['$scope', '$ionicPopup', "httpService" , '$state',
+	function($scope, $ionicPopup, httpService, $state){
+	$scope.supplier = {
+		userType: '供应商',
+		oldPassword: '',
+		newPassword: ''
+	}
+	$scope.show_error = false;
+	$scope.supplierModPassword = function(myform){
+		$scope.show_error = true;
+		if(myform.$valid){
+			if(myform.$dirty){
+				httpService.post("/user/changePassword",{
+					oldPassword: $scope.supplier.oldPassword,
+					newPassword: $scope.supplier.newPassword
+				})
+				.success(function(data){
+					if(data.status){
+						var promise = $ionicPopup.alert({
+							template: "密码修改成功！",
+							okText: "确认"
+						})
+						promise.then(function(data){
+							if(data){
+								$state.go("supplier.personal");
+							}
+						})
+					}else {
+						$ionicPopup.alert({
+							template: data.errMsg,
+							okText: "确认"
+						})
+					}
+				})
 			}
 		}
-		return newArray;
-	}
-	$scope.releaseKeywords = function(){
-		var cleanArray = $scope.cleanArray($scope.keywords);
-		httpService.post("/keywords/setKeywords",{
-			keywords: cleanArray
-		})
-		.success(function(data){
-			if(data.status){
-				var keywordsStr = cleanArray.toString();
-				$ionicPopup.alert({
-					title: "发布成功",
-					template:keywordsStr
-				});
-				$scope.keywords=["", "", ""];
-			}
-		})
 	}
 }])
+	// 发布关键字
+	.controller('releaseCtrl', ['$scope','$ionicPopup', 'httpService', '$rootScope', '$timeout', function($scope, $ionicPopup, httpService, $rootScope, $timeout){
+		$rootScope.main.dragContent = true;
 
-// 订单列表
-.controller('orderListCtrl', ['$scope','httpService', 'order', '$state', '$stateParams', '$ionicPopup','$http',
-	function($scope, httpService, order, $state, $stateParams,$ionicPopup, $http){
-	$scope.order = {
-		canBeLoaded: false,
-		content: [],
-		startTime: '',
-		endTime: '',
-		date: new Date().toISOString(),
-		count: 4
-	};
-
-	httpService.get("/order/getMyOldOrders/" + $scope.order.date +"/" +$scope.order.count)
-	.success(function(order){
-		if(order.status){
-			$scope.order.content = order.data;
-			$scope.order.endTime = order.data[0].createdOn;
-			$scope.order.startTime = order.data[$scope.order.count-1].createdOn;
-			$scope.order.canBeLoaded = true;
-		}
-	})
-	// $http
-	// .get("../data/orderList.json")
-	// .success(function(data){
-	// 	$scope.order.content = data;
-	// })
-	// .error(function(){
-
-	// })
-	$scope.amount = 0;//测试数据
-
-	// 刷新订单列表
-	$scope.loadNewOrderList = function(){
-		httpService.get("/order/getMyNewOrders/" + $scope.order.endTime)
-		.success(function(order){
-			console.log("length"+order.data.length)
-			if(order.status && order.data.length >0 ){
-				// $scope.order.content.unshift(order.data);
-				$scope.order.content = order.data.concat($scope.order.content)
-				$scope.order.endTime = order.data[0].createdOn;
-			}
-		})
-		.finally(function() {
-			// Stop the ion-refresher from spinning
-			$scope.$broadcast('scroll.refreshComplete');
-		});
-	}
-	// 加载更多订单数据
-	$scope.loadMoreOrder = function(){
-		// if($scope.order.canBeLoaded){			
-			httpService.get("/order/getMyOldOrders/" + $scope.order.startTime +"/" +$scope.order.count)
-			.success(function(order){
-				var len = order.data.length;
-				if(order.status && len >0 ){
-					// $scope.order.content.unshift(order.data);
-					$scope.order.content = $scope.order.content.concat(order.data)
-					$scope.order.startTime = order.data[len-1].createdOn;
-				}else {
-					$scope.order.canBeLoaded = false;
-					$ionicPopup.alert({
-						template: "没有更多数据了！"
-					})					
+		$scope.keywords=["", "", ""];
+		$scope.addKeywords = function(){
+			$timeout(function(){
+				$scope.keywords.push("")
+			},10)
+		};
+		$scope.cleanArray = function(array){
+			var newArray = [];
+			for(var i=0; i<array.length; i++){
+				if(array[i]){
+					newArray.push(array[i]);
 				}
-				$scope.$broadcast('scroll.infiniteScrollComplete');
+			}
+			return newArray;
+		}
+		$scope.releaseKeywords = function(){
+			var cleanArray = $scope.cleanArray($scope.keywords);
+			httpService.post("/keywords/setKeywords",{
+				keywords: cleanArray
 			})
-		// }else {
-		// }
-	}
-}])
+			.success(function(data){
+				if(data.status){
+					var keywordsStr = cleanArray.toString();
+					$ionicPopup.alert({
+						title: "发布成功",
+						template:keywordsStr
+					});
+					$scope.keywords=["", "", ""];
+				}
+			})
+		}
+	}])
+
+	// 订单列表
+	.controller('orderListCtrl', ['$scope','httpService', 'order', '$state', '$stateParams', '$ionicPopup','$http',
+		function($scope, httpService, order, $state, $stateParams,$ionicPopup, $http){
+		$scope.order = {
+			canBeLoaded: false,
+			content: [],
+			startTime: '',
+			endTime: '',
+			date: new Date().toISOString(),
+			count: 4
+		};
+
+		httpService.get("/order/getMyOldOrders/" + $scope.order.date +"/" +$scope.order.count)
+		.success(function(order){
+			if(order.status){
+				$scope.order.content = order.data;
+				$scope.order.endTime = order.data[0].createdOn;
+				$scope.order.startTime = order.data[$scope.order.count-1].createdOn;
+				$scope.order.canBeLoaded = true;
+			}
+		})
+		// $http
+		// .get("../data/orderList.json")
+		// .success(function(data){
+		// 	$scope.order.content = data;
+		// })
+		// .error(function(){
+
+		// })
+		$scope.amount = 0;//测试数据
+
+		// 刷新订单列表
+		$scope.loadNewOrderList = function(){
+			httpService.get("/order/getMyNewOrders/" + $scope.order.endTime)
+			.success(function(order){
+				console.log("length"+order.data.length)
+				if(order.status && order.data.length >0 ){
+					// $scope.order.content.unshift(order.data);
+					$scope.order.content = order.data.concat($scope.order.content)
+					$scope.order.endTime = order.data[0].createdOn;
+				}
+			})
+			.finally(function() {
+				// Stop the ion-refresher from spinning
+				$scope.$broadcast('scroll.refreshComplete');
+			});
+		}
+		// 加载更多订单数据
+		$scope.loadMoreOrder = function(){
+			// if($scope.order.canBeLoaded){			
+				httpService.get("/order/getMyOldOrders/" + $scope.order.startTime +"/" +$scope.order.count)
+				.success(function(order){
+					var len = order.data.length;
+					if(order.status && len >0 ){
+						// $scope.order.content.unshift(order.data);
+						$scope.order.content = $scope.order.content.concat(order.data)
+						$scope.order.startTime = order.data[len-1].createdOn;
+					}else {
+						$scope.order.canBeLoaded = false;
+						$ionicPopup.alert({
+							template: "没有更多数据了！"
+						})					
+					}
+					$scope.$broadcast('scroll.infiniteScrollComplete');
+				})
+			// }else {
+			// }
+		}
+	}])
 // 报价
 .controller('quotationCtrl', ['$scope','$http', '$state', '$stateParams','$ionicHistory', '$ionicTabsDelegate', 'order', 
 	function($scope, $http, $state, $stateParams, $ionicHistory, $ionicTabsDelegate, order){
