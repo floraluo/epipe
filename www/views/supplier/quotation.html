@@ -3,10 +3,10 @@
 	<ion-content class="scroll-bg quotation">
 		<form name="quoForm" ng-submit="quotation(quoForm)" novalidate>	
 			<div class="order-info-warp">
-				<i class="button button-icon icon ion-ios-person-outline"></i>
+				<i class=" iconfont icon-user"></i>
 				<div class="order-info">
 					<div class="name">{{order.productName}}</div>
-					<div class="small amount">数量：{{order.productAmount}}吨</div>
+					<div class="small amount">数量：{{order.productAmount}}{{order.productUnit}}</div>
 					<div class="small date">{{order.createdOn  | date:'yyyy-MM-dd'}}</div>
 				</div>
 			</div>

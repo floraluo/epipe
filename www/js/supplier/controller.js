@@ -310,8 +310,8 @@ angular.module('starter.controller' , [])
 	}])
 
 	// 订单列表
-	.controller('orderListCtrl', ['$scope','httpService', 'order', '$state', '$stateParams', '$ionicPopup','$http',
-		function($scope, httpService, order, $state, $stateParams,$ionicPopup, $http){
+	.controller('orderListCtrl', ['$scope','httpService', '$state', '$stateParams', '$ionicPopup','$http',
+		function($scope, httpService, $state, $stateParams,$ionicPopup, $http){
 		$scope.order = {
 			canBeLoaded: false,
 			content: [],
@@ -378,99 +378,94 @@ angular.module('starter.controller' , [])
 			// }
 		}
 	}])
-// 报价
-.controller('quotationCtrl', ['$scope', '$ionicPopup', 'httpService', '$state', '$stateParams','$ionicHistory', '$ionicTabsDelegate', 'order', 
-	function($scope, $ionicPopup, httpService, $state, $stateParams, $ionicHistory, $ionicTabsDelegate, order){
-
-	// 隐藏tabs
-	$ionicTabsDelegate.showBar(false);
-
-	// show_error：是否显示错误提示
-	$scope.show_error = false;
-	$scope.quo = {
-		btnText: "报价",
-		isFirst: false
-	}
-	$scope.productQuo = {
-		unitPrice: '',
-		totalPrice: ''
-	}
-	// 订单信息
-	httpService.get('/order/getByOrderName/'+$stateParams.orderId)
-	.success(function(data){
-		$scope.order = data.data;
-	})
-	// 报价记录
-	httpService.get('/order/getSupQuotation/'+$stateParams.orderId)
-	.success(function(data){
-		if(data.status){
-			var quotation = data.data;
-			$scope.productQuo = {
-				unitPrice: quotation.unitPrice,
-				totalPrice: quotation.sumPrice
-			}
-			$scope.quo.btnText = "修改报价";
-		}else {
-			$scope.quo.isFirst = true;
-		}
-	})
-
-	// 计算总价
-	$scope.canlTotalPrice = function(orderNum){
-		$scope.productQuo.unitPrice = parseInt($scope.productQuo.unitPrice) > 0 ? $scope.productQuo.unitPrice : '';
-		$scope.productQuo.totalPrice = $scope.productQuo.unitPrice*orderNum !=0 ? $scope.productQuo.unitPrice*orderNum : ''
-	}
-
 	// 报价
-	$scope.quotation = function(myform){
-		if(myform.$dirty){
-			$scope.show_error = true;
-			if(myform.$valid){
-				httpService.post("/order/setQuotation", {
-					unitPrice: $scope.productQuo.unitPrice,
-					sumPrice: $scope.productQuo.totalPrice,
-					orderName: $stateParams.orderId
-				})
-				.success(function(data){
-					if(data.status){
-						var promise = $ionicPopup.alert({
-							template: "报价完成，返回订单列表",
-							okText: "确认"
-						});
-						promise.then(function(data){
-							if(data){
-								$state.go("supplier.orderList");								
-							}
-						})
-					}
-				})
-				// $state.go("supplier.orderDetail",{orderId:$stateParams.orderId})
+	.controller('quotationCtrl', ['$scope', '$ionicPopup', 'httpService', '$state', '$stateParams','$ionicHistory', '$ionicTabsDelegate', 
+		function($scope, $ionicPopup, httpService, $state, $stateParams, $ionicHistory, $ionicTabsDelegate){
+
+		// 隐藏tabs
+		$ionicTabsDelegate.showBar(false);
+
+		// show_error：是否显示错误提示
+		$scope.show_error = false;
+		$scope.quo = {
+			btnText: "报价",
+			isFirst: false
+		}
+		$scope.productQuo = {
+			unitPrice: '',
+			totalPrice: ''
+		}
+		// 订单信息
+		httpService.get('/order/getByOrderName/'+$stateParams.orderId)
+		.success(function(data){
+			$scope.order = data.data;
+		})
+		// 报价记录
+		httpService.get('/order/getSupQuotation/'+$stateParams.orderId)
+		.success(function(data){
+			if(data.status){
+				var quotation = data.data;
+				$scope.productQuo = {
+					unitPrice: quotation.unitPrice,
+					totalPrice: quotation.sumPrice
+				}
+				$scope.quo.btnText = "修改报价";
+			}else {
+				$scope.quo.isFirst = true;
+			}
+		})
+
+		// 计算总价
+		$scope.canlTotalPrice = function(orderNum){
+			$scope.productQuo.unitPrice = parseInt($scope.productQuo.unitPrice) > 0 ? $scope.productQuo.unitPrice : '';
+			$scope.productQuo.totalPrice = $scope.productQuo.unitPrice*orderNum !=0 ? $scope.productQuo.unitPrice*orderNum : ''
+		}
+
+		// 报价
+		$scope.quotation = function(myform){
+			if(myform.$dirty){
+				$scope.show_error = true;
+				if(myform.$valid){
+					httpService.post("/order/setQuotation", {
+						unitPrice: $scope.productQuo.unitPrice,
+						sumPrice: $scope.productQuo.totalPrice,
+						orderName: $stateParams.orderId
+					})
+					.success(function(data){
+						if(data.status){
+							var promise = $ionicPopup.alert({
+								template: "报价完成，返回订单列表",
+								okText: "确认"
+							});
+							promise.then(function(data){
+								if(data){
+									$state.go("supplier.orderList");								
+								}
+							})
+						}
+					})
+				}
 			}
 		}
-	}
-}])
-// 订单详情
-.controller('orderDetailCtrl', ['$scope','$http', '$state','$stateParams', '$ionicHistory','$location', '$ionicTabsDelegate', 'order', 'supplier', 
-		function($scope, $http,$state, $stateParams, $ionicHistory, $location, $ionicTabsDelegate, order, supplier){
-	// 隐藏tabs
-	$ionicTabsDelegate.showBar(false);
-	// $scope.order = order[$stateParams.orderId]
-	// $ionicHistory.goBack(-1);
-	// $scope.$on("$ionicView.enter", function () {
-	//    $ionicHistory.clearCache();
-	//    $ionicHistory.clearHistory();
-	// });
-	$http.get('../data/orderDetail'+$stateParams.orderId+'.json')
-	.success(function(data){
-		$scope.order = data;
-	})
-	var promise = supplier.getSupplierInfo();
-	promise.then(function(data){
-		$scope.supplier = data;
-	}, function(data){
-		// $scope.supplier = 
-	})
-}])
+	}])
+	// 订单详情
+	.controller('orderDetailCtrl', ['$scope','httpService','$stateParams', '$ionicHistory', '$ionicTabsDelegate', 
+			function($scope, httpService, $stateParams, $ionicHistory, $ionicTabsDelegate){
+		// 隐藏tabs
+		$ionicTabsDelegate.showBar(false);
+		// $scope.order = order[$stateParams.orderId]
+		// $ionicHistory.goBack(-1);
+		// $scope.$on("$ionicView.enter", function () {
+		//    $ionicHistory.clearCache();
+		//    $ionicHistory.clearHistory();
+		// });
+
+		// 订单信息
+		httpService.get('/order/getByOrderName/'+$stateParams.orderId)
+		.success(function(data){
+			$scope.order = data.data;
+		})
+	}])
 // 物流跟踪
 .controller('LogisTrackCtrl', ['$scope','$http','$stateParams', '$ionicTabsDelegate', function($scope, $http,$stateParams, $ionicTabsDelegate){
 	// 隐藏tabs

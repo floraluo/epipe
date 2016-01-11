@@ -19,14 +19,17 @@ $dark:                            #444 !default;
 // $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
-// @import "www/lib/ionic/scss/ionic";
+
+// @import "./ionicMixin/ionic";
 
 
 
 
 
 
-@import "mixin";
+@import "mixin","ionicMixin";
+
+
 html{
 	font-size: 62.5%
 }
@@ -108,6 +111,9 @@ form{
 	}
 	.card-round{
 		border-radius: 10px;
+	}
+	.button-my-balanced,.bar-my-balanced{
+		background-color: #24ccab;
 	}
 	.button-round{
 		border-radius: 25px;
@@ -206,7 +212,9 @@ form{
 			background: linear-gradient(#fbeee5,#f7f7f7);
 			>i{
 				position: absolute;
-				left: 10px;
+				left: 15px;
+				font-size: 2.6rem;
+				color: #26cdae;
 			}
 			>.order-info{
 				padding-left: 50px;

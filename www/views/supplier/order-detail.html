@@ -10,13 +10,13 @@
 					<div class="iconfont icon-woshou merchant-cooperation "></div>
 					<div class="merchant merchant-a">
 						<div class="button-icon icon iconfont icon-user text-center"></div>
-						<div class="name">{{order.purchaserCompany}}</div>
-						<div class="tel">TEL:{{order.purchaserTel}}</div>
+						<div class="name">{{order.purchaser.userProfile.company}}</div>
+						<div class="tel">TEL:{{order.purchaser.phone}}</div>
 					</div>
 					<div class="merchant merchant-b">
 						<div class="button-icon icon iconfont icon-user text-center"></div>
-						<div class="name">{{supplier.company}}</div>
-						<div class="tel">TEL:{{supplier.tel}}</div>
+						<div class="name">{{order.supplier.userProfile.company}}</div>
+						<div class="tel">TEL:{{order.supplier.phone}}</div>
 					</div>
 				</div>
 			</div>
@@ -24,7 +24,7 @@
 				<div class="list">
 					<div class="control-label info">
 						<span class="label">编号：</span>
-						<div class="value"><span class="num">{{order.orderNum}}</span></div>
+						<div class="value"><span class="num">{{order.name}}</span></div>
 					</div>
 					<div class="control-label info">
 						<span class="label">商品：</span>
@@ -32,15 +32,15 @@
 					</div>
 					<div class="control-label info">
 						<span class="label">单价：</span>
-						<div class="value"><span class="price">{{order.unitPrice}}</span>元/吨</div>
+						<div class="value"><span class="price">{{order.unitPrice}}</span>元/{{order.productUnit}}</div>
 					</div>
 					<div class="control-label info">
 						<span class="label">数量：</span>
-						<div class="value"><span class="amount">{{order.productAmount}}吨</span></div>
+						<div class="value"><span class="amount">{{order.productAmount}}{{order.productUnit}}</span></div>
 					</div>
 					<div class="control-label info">
 						<span class="label">总价：</span>
-						<div class="value"><span class="total">{{order.totalPrice}}元</span></div>
+						<div class="value"><span class="total">{{order.sumPrice}}元</span></div>
 					</div>
 				</div>
 			</div>

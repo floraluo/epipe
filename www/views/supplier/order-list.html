@@ -5,7 +5,7 @@
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
 			<div class="item item-text-wrap order-info">
 				<div class="name">{{o.productName}}</div>
-				<div class="small amount">数量：{{o.productAmount}}吨</div>
+				<div class="small amount">数量：{{o.productAmount}}{{o.productUnit}}</div>
 				<div class="small date">{{ o.createdOn | date:'yyyy-MM-dd'}}</div>
 				<a class="state state-quote" href="#/supplier/quotation?orderId={{o.name}}"  ng-if="o.state=='报价'">
 					<i class="icon ion-android-star-outline"></i>

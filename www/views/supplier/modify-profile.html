@@ -31,14 +31,14 @@
 			</div>
 
 			<div class="item">
-				<button class="button button-full button-balanced  button-round" ng-disabled="!ready" select-img type="button">上传证件</button>
+				<button class="button button-full button-balanced button-my-balanced  button-round" ng-disabled="!ready" select-img type="button">上传证件</button>
 			</div>
 			<div class="item-img clearfix" ng-hide="supplier.userProfile.myCredentials==''">
 				<div ng-repeat='img in supplier.userProfile.myCredentials track by $index'><img ng-src="{{img}}" on-hold="onHoldImg($index)"></div>
 			</div>
 			
 			<div class="item">
-				<button class="button button-full button-balanced button-round" type="submit">保存</button>
+				<button class="button button-full button-balanced button-my-balanced button-round" type="submit">保存</button>
 			</div>
 		</div>
 	</form>

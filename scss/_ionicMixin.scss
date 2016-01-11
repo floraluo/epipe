@@ -1,0 +1,51 @@
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+@import "./ionicMixin/ionic";
+$my-balanced:                        #24ccab !default;
+
+$button-my-balanced-bg:              $my-balanced !default;
+$button-my-balanced-text:            #fff !default;
+$button-my-balanced-border:          darken($my-balanced, 10%) !default;
+$button-my-balanced-active-bg:       darken($my-balanced, 10%) !default;
+$button-my-balanced-active-border:   darken($my-balanced, 10%) !default;
+
+$bar-my-balanced-bg:                 rgba($button-my-balanced-bg, $bar-transparency) !default;
+$bar-my-balanced-text:               $button-my-balanced-text !default;
+$bar-my-balanced-border:             $button-my-balanced-border !default;
+$bar-my-balanced-active-bg:          $button-my-balanced-active-bg !default;
+$bar-my-balanced-active-border:      $button-my-balanced-active-border !default;
+
+$tabs-my-balanced-bg:                $button-my-balanced-bg !default;
+$tabs-my-balanced-border:            $button-my-balanced-border !default;
+$tabs-my-balanced-text:              $button-my-balanced-text !default;
+
+.button{
+	&.button-my-balanced {
+    @include button-style($button-my-balanced-bg, $button-my-balanced-border, $button-my-balanced-active-bg, $button-my-balanced-active-border, $button-my-balanced-text);
+    @include button-clear($button-my-balanced-bg);
+    @include button-outline($button-my-balanced-bg);
+  }
+}
+
+.bar {
+	&.bar-my-balanced {
+    @include bar-style($bar-my-balanced-bg, $bar-my-balanced-border, $bar-my-balanced-text);
+    &.bar-footer{
+      background-image: linear-gradient(180deg, $bar-my-balanced-border, $bar-positive-border 50%, transparent 50%);
+    }
+  }
+}
+.bar-my-balanced {
+  .button {
+    @include button-style($bar-my-balanced-bg, $bar-my-balanced-border, $bar-my-balanced-active-bg, $bar-my-balanced-active-border, $bar-my-balanced-text);
+    @include button-clear(#fff, $bar-title-font-size);
+  }
+}
+
+.tabs-my-balanced > .tabs,
+.tabs.tabs-my-balanced {
+  @include tab-style($tabs-my-balanced-bg, $tabs-my-balanced-border, $tabs-my-balanced-text);
+  @include tab-badge-style($tabs-my-balanced-text, $tabs-my-balanced-bg);
+}
+.tabs-striped {
+	@include tabs-striped('tabs-my-balanced', $light, $balanced);
+}
