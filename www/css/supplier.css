@@ -11671,7 +11671,7 @@ a.button .icon:before, a.button.icon:before, a.button.icon-left:before, a.button
 }
 
 .tabs-striped.tabs-my-balanced .tabs {
-  background-color: #33cd5f;
+  background-color: #24ccab;
 }
 .tabs-striped.tabs-my-balanced .tab-item {
   color: rgba(255, 255, 255, 0.4);
@@ -11689,6 +11689,38 @@ a.button .icon:before, a.button.icon:before, a.button.icon-left:before, a.button
 }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%;
+}
+.tabs-striped.tabs-color-my-balanced .tab-item {
+  color: rgba(36, 204, 171, 0.4);
+  opacity: 1;
+}
+.tabs-striped.tabs-color-my-balanced .tab-item .badge {
+  opacity: 0.4;
+}
+.tabs-striped.tabs-color-my-balanced .tab-item.tab-item-active, .tabs-striped.tabs-color-my-balanced .tab-item.active, .tabs-striped.tabs-color-my-balanced .tab-item.activated {
+  margin-top: -2px;
+  color: #24ccab;
+  border: 0 solid #24ccab;
+  border-top-width: 2px;
+}
+.tabs-striped.tabs-color-my-balanced .tab-item.tab-item-active .badge, .tabs-striped.tabs-color-my-balanced .tab-item.active .badge, .tabs-striped.tabs-color-my-balanced .tab-item.activated .badge {
+  top: 2px;
+  opacity: 1;
+}
+
+.tabs-color-my-balanced .tab-item {
+  color: rgba(36, 204, 171, 0.4);
+  opacity: 1;
+}
+.tabs-color-my-balanced .tab-item .badge {
+  opacity: 0.4;
+}
+.tabs-color-my-balanced .tab-item.tab-item-active, .tabs-color-my-balanced .tab-item.active, .tabs-color-my-balanced .tab-item.activated {
+  color: #24ccab;
+  border: 0 solid #24ccab;
+}
+.tabs-color-my-balanced .tab-item.tab-item-active .badge, .tabs-color-my-balanced .tab-item.active .badge, .tabs-color-my-balanced .tab-item.activated .badge {
+  opacity: 1;
 }
 
 html {

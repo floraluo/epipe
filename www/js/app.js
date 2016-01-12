@@ -28,7 +28,7 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
   });
 })
 .config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider){
-  $ionicConfigProvider.tabs.position('bottom').style('standard');
+  $ionicConfigProvider.tabs.position('bottom').style('striped');
   $urlRouterProvider.otherwise('supplier/home');
   // $urlRouterProvider.otherwise('supplier/register');
 $httpProvider.defaults.headers.get={'Content-Type':'jwt'};

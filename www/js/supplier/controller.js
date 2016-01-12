@@ -218,7 +218,8 @@ angular.module('starter.controller' , [])
 						if(data.status){
 							var promise = $ionicPopup.alert({
 								template: "修改成功！",
-								okText: "确认"
+								okText: "确认",
+								okType: "button-my-balanced"
 							})
 							promise.then(function(data){
 								if(data){
@@ -254,7 +255,8 @@ angular.module('starter.controller' , [])
 						if(data.status){
 							var promise = $ionicPopup.alert({
 								template: "密码修改成功！",
-								okText: "确认"
+								okText: "确认",
+								okType: "button-my-balanced"
 							})
 							promise.then(function(data){
 								if(data){
@@ -264,7 +266,8 @@ angular.module('starter.controller' , [])
 						}else {
 							$ionicPopup.alert({
 								template: data.errMsg,
-								okText: "确认"
+								okText: "确认",
+								okType: "button-my-balanced"
 							})
 						}
 					})
@@ -387,7 +390,9 @@ angular.module('starter.controller' , [])
 			}else {
 				$scope.order.canBeLoaded = false;	
 				$ionicPopup.alert({
-					template: "没有更多数据了！"
+					template: "没有更多数据了！",
+					okText: "确认",
+					okType: "button-my-balanced"
 				})
 			}
 		}
@@ -449,7 +454,8 @@ angular.module('starter.controller' , [])
 						if(data.status){
 							var promise = $ionicPopup.alert({
 								template: "报价完成，返回订单列表",
-								okText: "确认"
+								okText: "确认",
+								okType: "button-my-balanced"
 							});
 							promise.then(function(data){
 								if(data){
@@ -478,7 +484,8 @@ angular.module('starter.controller' , [])
 				if(data.status){
 					$ionicPopup.alert({
 						template: "已发货",
-						okText: "确认"
+						okText: "确认",
+						okType: "button-my-balanced"
 					});
 					$scope.showDelivery = false;
 				}

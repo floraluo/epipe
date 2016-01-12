@@ -47,5 +47,8 @@ $tabs-my-balanced-text:              $button-my-balanced-text !default;
   @include tab-badge-style($tabs-my-balanced-text, $tabs-my-balanced-bg);
 }
 .tabs-striped {
-	@include tabs-striped('tabs-my-balanced', $light, $balanced);
+	@include tabs-striped('tabs-my-balanced', $light, $my-balanced);
+
+  @include tabs-striped-color('tabs-color-my-balanced', $my-balanced);
 }
+@include tabs-color('tabs-color-my-balanced', $my-balanced);
