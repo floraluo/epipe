@@ -303,8 +303,10 @@ angular.module('starter.controller' , [])
 				if(data.status){
 					var keywordsStr = cleanArray.toString();
 					$ionicPopup.alert({
-						title: "发布成功",
-						template:keywordsStr
+						title: "关键字发布成功",
+						template:keywordsStr,
+						okText: "确认",
+						okType: "button-my-balanced"
 					});
 					$scope.keywords=["", "", ""];
 				}
