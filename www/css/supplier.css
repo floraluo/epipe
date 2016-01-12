@@ -11714,10 +11714,10 @@ form .error {
 .scroll-bg .pin {
   position: absolute;
   z-index: 99;
-  left: 6px;
-  top: -9px;
+  left: 5px;
+  top: -19px;
   display: inline-block;
-  width: 50px;
+  width: 60px;
   height: 100px;
   background: url("../img/pin.png") no-repeat;
 }
@@ -11842,6 +11842,10 @@ form .error {
   font-size: 1.2rem;
   text-decoration: none;
   color: #009b44;
+}
+.supplier .order-list .item > .logistics-tracking > .icon-truck {
+  margin-left: 5px;
+  vertical-align: -5%;
 }
 .supplier .quotation .order-info-warp {
   padding-top: 20px;

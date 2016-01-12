@@ -14,7 +14,7 @@
 				<a class="state" href="#/supplier/orderDetail?orderId={{o.name}}" ng-if="o.state!='报价'">
 					{{o.state}}
 				</a>
-				<a class="logistics-tracking" href="#/supplier/logisticsTracking?orderId={{o.name}}" ng-if="o.trackInfo">物流追踪</a>
+				<a class="logistics-tracking" href="#/supplier/logisticsTracking?orderId={{o.name}}" ng-if="o.state=='已发货'">物流追踪<i class="iconfont icon-truck"></i></a>
 			</div>
 		</div>
 		<ion-infinite-scroll spinner="ios-small" ng-if="order.canBeLoaded" on-infinite="loadMoreOrder()" distance="1%" immediate-check="true">

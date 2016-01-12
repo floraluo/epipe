@@ -314,41 +314,48 @@ angular.module('starter.controller' , [])
 		function($scope, httpService, $state, $stateParams,$ionicPopup, $http){
 		$scope.order = {
 			canBeLoaded: false,
+			mostData: false,
 			content: [],
-			startTime: '',
-			endTime: '',
+			// startTime: '',
+			// endTime: '',
 			date: new Date().toISOString(),
-			count: 10
+			count: 5,
+			oldCount: 0,
+			oldMaxCount: 0
 		};
+		$scope.$on("$ionicView.beforeEnter", function(){
+			httpService.get("/order/getMyOldOrders/" + $scope.order.count +"/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
+			.success(function(data){
+				if(data.status){
+					var orderData = data.data,
+						orderArray = orderData.orders,
+						len = orderArray.length;
+					$scope.order.content = orderArray;
+					$scope.order.oldCount = len;
+					$scope.order.oldMaxCount = orderData.maxCount;
+					// $scope.order.endTime = orderArray[0].createdOn;
+					// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
+					$scope.order.canBeLoaded = true;
 
-		httpService.get("/order/getMyOldOrders/" + $scope.order.date +"/" +$scope.order.count)
-		.success(function(order){
-			if(order.status){
-				$scope.order.content = order.data;
-				$scope.order.endTime = order.data[0].createdOn;
-				$scope.order.startTime = order.data[$scope.order.count-1].createdOn;
-				$scope.order.canBeLoaded = true;
-			}
+					if(len == orderData.maxCount){
+						$scope.order.mostData = true;							
+					}
+				}
+			})			
 		})
-		// $http
-		// .get("../data/orderList.json")
-		// .success(function(data){
-		// 	$scope.order.content = data;
-		// })
-		// .error(function(){
-
-		// })
 		$scope.amount = 0;//测试数据
 
 		// 刷新订单列表
 		$scope.loadNewOrderList = function(){
-			httpService.get("/order/getMyNewOrders/" + $scope.order.endTime)
-			.success(function(order){
-				console.log("length"+order.data.length)
-				if(order.status && order.data.length >0 ){
-					// $scope.order.content.unshift(order.data);
-					$scope.order.content = order.data.concat($scope.order.content)
-					$scope.order.endTime = order.data[0].createdOn;
+			httpService.get("/order/getMyNewOrders/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
+			.success(function(data){
+				var orderData = data.data,
+					orderArray = orderData.orders,
+					len = orderArray.length;
+				if(data.status){
+					$scope.order.content = orderArray;
+					$scope.order.oldCount = len;
+					$scope.order.oldMaxCount = orderData.maxCount;
 				}
 			})
 			.finally(function() {
@@ -356,26 +363,33 @@ angular.module('starter.controller' , [])
 				$scope.$broadcast('scroll.refreshComplete');
 			});
 		}
+
 		// 加载更多订单数据
 		$scope.loadMoreOrder = function(){
-			// if($scope.order.canBeLoaded){			
-				httpService.get("/order/getMyOldOrders/" + $scope.order.startTime +"/" +$scope.order.count)
-				.success(function(order){
-					var len = order.data.length;
-					if(order.status && len >0 ){
-						// $scope.order.content.unshift(order.data);
-						$scope.order.content = $scope.order.content.concat(order.data)
-						$scope.order.startTime = order.data[len-1].createdOn;
-					}else {
-						$scope.order.canBeLoaded = false;
-						$ionicPopup.alert({
-							template: "没有更多数据了！"
-						})					
+			if(!$scope.order.mostData){
+				httpService.get("/order/getMyOldOrders/" + $scope.order.count +"/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
+				.success(function(data){
+					var orderData = data.data,
+						orderArray = orderData.orders,
+						len = orderArray.length;
+					if(data.status && len <= orderData.maxCount ){
+						$scope.order.content = orderArray;
+						// $scope.order.content = $scope.order.content.concat(orderArray);
+						$scope.order.oldCount = len;
+						$scope.order.oldMaxCount = orderData.maxCount;
+						if(len == orderData.maxCount){
+							$scope.order.mostData = true;							
+						}
+						// $scope.order.startTime = order.data[len-1].createdOn;
 					}
 					$scope.$broadcast('scroll.infiniteScrollComplete');
 				})
-			// }else {
-			// }
+			}else {
+				$scope.order.canBeLoaded = false;	
+				$ionicPopup.alert({
+					template: "没有更多数据了！"
+				})
+			}
 		}
 	}])
 	// 报价
@@ -449,10 +463,27 @@ angular.module('starter.controller' , [])
 		}
 	}])
 	// 订单详情
-	.controller('orderDetailCtrl', ['$scope','httpService','$stateParams', '$ionicHistory', '$ionicTabsDelegate', 
-			function($scope, httpService, $stateParams, $ionicHistory, $ionicTabsDelegate){
+	.controller('orderDetailCtrl', ['$scope','httpService','$ionicPopup', '$stateParams', '$ionicHistory', '$ionicTabsDelegate', 
+		function($scope, httpService, $ionicPopup, $stateParams, $ionicHistory, $ionicTabsDelegate){
 		// 隐藏tabs
 		$ionicTabsDelegate.showBar(false);
+
+		// 是否发货
+		$scope.showDelivery = false;
+		$scope.delivery = function(){
+			httpService.post("/order/sendGoods",{
+				orderName: $stateParams.orderId
+			})
+			.success(function(data){
+				if(data.status){
+					$ionicPopup.alert({
+						template: "已发货",
+						okText: "确认"
+					});
+					$scope.showDelivery = false;
+				}
+			})
+		}
 		// $scope.order = order[$stateParams.orderId]
 		// $ionicHistory.goBack(-1);
 		// $scope.$on("$ionicView.enter", function () {
@@ -464,18 +495,55 @@ angular.module('starter.controller' , [])
 		httpService.get('/order/getByOrderName/'+$stateParams.orderId)
 		.success(function(data){
 			$scope.order = data.data;
+			var orderState = $scope.order.state;
+			if(orderState == "未支付" || orderState == '已支付'){
+				$scope.showDelivery = true;
+			}
 		})
 	}])
 // 物流跟踪
-.controller('LogisTrackCtrl', ['$scope','$http','$stateParams', '$ionicTabsDelegate', function($scope, $http,$stateParams, $ionicTabsDelegate){
+.controller('LogisTrackCtrl', ['$scope','httpService', '$stateParams', '$ionicTabsDelegate', 
+	function($scope,httpService, $stateParams, $ionicTabsDelegate){
 	// 隐藏tabs
 	$ionicTabsDelegate.showBar(false);
-
-	$http.get("../data/transit_step.json")
+	$scope.logistics={
+		info: ""
+	};
+	// 物流信息
+	httpService.get("/order/getLogistics/" + $stateParams.orderId)
 	.success(function(data){
-		$scope.transit = data;
-		$scope.thisOrder = data.orderInfo;	
+		if(data.status){
+			var dataArray = data.data;
+			$scope.transit = dataArray;
+		}
 	})
+
+	// 订单信息
+	httpService.get("/order/getByOrderName/" + $stateParams.orderId)
+	.success(function(data){
+		if(data.status){
+			$scope.order = data.data
+		}
+	})
+
+	// 添加物流信息
+	$scope.addLogisticsInfo = function(info){
+		httpService.post("/order/addLogistics", {
+			orderName: $stateParams.orderId,
+			info: info
+		})
+		.success(function(data){
+			if(data.status){
+				$scope.transit.unshift(data.data);
+			}
+		})
+		$scope.logistics.info = "";
+	}
+	// $http.get("../data/transit_step.json")
+	// .success(function(data){
+	// 	$scope.transit = data;
+	// 	$scope.thisOrder = data.orderInfo;	
+	// })
 	// $http.get("../data/orderDetail"+$stateParams.orderId+".json")
 	// .success(function(data){
 	// 	$scope.thisOrder = data;

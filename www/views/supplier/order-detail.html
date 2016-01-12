@@ -1,5 +1,6 @@
 <ion-view view-title="订单详情">
 	<ion-content class="scroll-bg order-detail">
+		<!-- <i class="iconfont icon-attachment"></i> -->
 		<i class="pin"></i>
 		<div class="card card-round">
 			<div class="item item-divider diamonds-bg">
@@ -43,6 +44,9 @@
 						<div class="value"><span class="total">{{order.sumPrice}}元</span></div>
 					</div>
 				</div>
+			</div>
+			<div class="item" ng-show="showDelivery">
+				<button class="button button-block button-round button-my-balanced" ng-click="delivery()">发货</button>
 			</div>
 		</div>
 	</ion-content>

@@ -9,38 +9,38 @@
 				<div class="commodity-info-wrap">
 					<div class="control-label">
 						<span class="label">单号：</span>
-						<div class="value">{{thisOrder.orderNum}}</div>
+						<div class="value">{{order.name}}</div>
 					</div>
 					<div class="control-label">
 						<span class="label">商品：</span>
-						<div class="value">{{thisOrder.productName}}</div>
+						<div class="value">{{order.productName}}</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="item item-input-inset">
 				<label class="item-input-wrapper">
-					<input type="text" placeholder="请输入物流状态">
+					<input ng-model="logistics.info" type="text" placeholder="请输入物流状态">
 				</label>
-				<button class="button button-small button-balanced">更新</button>
+				<button class="button button-small button-balanced" ng-click="addLogisticsInfo(logistics.info)">更新</button>
 			</div>
 			<div class="item item-body">
 				<div class="logistics-info-wrap">
 					<div class="end-state" ng-show="transit.isSuccess">包裹已被采购商签收</div>
 					<div class="end-state" ng-show="!transit.isSuccess">你的包裹正在运输中，请耐心等待...</div>
 					<div class="logistics-info">
-						<div class="track-item" ng-repeat="t in transit.address">
+						<div class="track-item" ng-repeat="t in transit">
 							<i class="icon ion-ios-circle-outline"></i>
 							<div class="schedule">
-								<span class="date">{{t.date}}</span>
-								<span class="week">{{t.week}}</span>
-								<span class="time">{{t.time}}</span>
+								<span class="date">{{t.createdOn | date:'yyyy-MM-dd'}}</span>
+								<span class="week">{{t.createdOn | date:'EEE' | chineseWeek:true}}</span>
+								<span class="time">{{t.createdOn | date:'HH:mm:ss'}}</span>
 							</div>
-							<div class="state">{{t.place}}</div>
+							<div class="state">{{t.info}}</div>
 						</div>
 					</div>
 				</div>
-				<a class="button button-full button-stable button-round" href="#/supplier/orderDetail?orderId={{thisOrder.orderId}}">联系买家</a>
+				<a class="button button-full button-stable button-round" href="#/supplier/orderDetail?orderId={{order.name}}">联系买家</a>
 			</div>
 		</div>
 	</ion-content>
