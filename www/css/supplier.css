@@ -11848,9 +11848,18 @@ form .error {
   vertical-align: -5%;
 }
 .supplier .quotation .order-info-warp {
+  position: relative;
   padding-top: 20px;
   padding-bottom: 20px;
   background: linear-gradient(#fbeee5, #f7f7f7);
+}
+.supplier .quotation .order-info-warp > .sawtooth-border {
+  position: absolute;
+  bottom: -5px;
+  z-index: 10;
+  width: 100%;
+  height: 10px;
+  background: url(../img/sawtooth.png) repeat-x bottom;
 }
 .supplier .quotation .order-info-warp > i {
   position: absolute;
