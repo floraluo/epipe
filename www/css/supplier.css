@@ -12035,3 +12035,6 @@ form .error {
   font-size: 1.8rem;
   word-break: break-word;
 }
+.supplier .personal-center .bottom-info .button-icon-group {
+  color: #009276;
+}
