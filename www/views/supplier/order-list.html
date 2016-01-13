@@ -2,6 +2,12 @@
 	<ion-content class="scroll-bg order-list">
 		<ion-refresher snipper="ios-small" on-refresh="loadNewOrderList()" pulling-text="下拉更新订单列表...">
 		</ion-refresher>		
+		<div class="card" ng-show="order.showNoOrderText">
+			  <div class="item item-divider">关键字搜索结果</div>
+			<div class="item item-text-wrap text-center">
+				<p class="padding">没有与关键字匹配的订单</p>
+			</div>			
+		</div>
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
 			<div class="item item-text-wrap order-info">
 				<div class="name">{{o.productName}}</div>

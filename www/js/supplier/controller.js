@@ -276,7 +276,8 @@ angular.module('starter.controller' , [])
 		}
 	}])
 	// 发布关键字
-	.controller('releaseCtrl', ['$scope','$ionicPopup', 'httpService', '$rootScope', '$timeout', function($scope, $ionicPopup, httpService, $rootScope, $timeout){
+	.controller('releaseCtrl', ['$scope','$state', '$ionicPopup', 'httpService', '$rootScope', '$timeout', 
+		function($scope, $state, $ionicPopup, httpService, $rootScope, $timeout){
 		$rootScope.main.dragContent = true;
 
 		$scope.keywords=["", "", ""];
@@ -302,25 +303,28 @@ angular.module('starter.controller' , [])
 			.success(function(data){
 				if(data.status){
 					var keywordsStr = cleanArray.toString();
-					$ionicPopup.alert({
-						title: "关键字发布成功",
-						template:keywordsStr,
-						okText: "确认",
-						okType: "button-my-balanced"
-					});
+					// $ionicPopup.alert({
+					// 	title: "关键字发布成功",
+					// 	template:keywordsStr,
+					// 	okText: "确认",
+					// 	okType: "button-my-balanced"
+					// });
 					$scope.keywords=["", "", ""];
+
+					$state.go("supplier.orderList");
 				}
 			})
 		}
 	}])
 
 	// 订单列表
-	.controller('orderListCtrl', ['$scope','httpService', '$state', '$stateParams', '$ionicPopup','$http',
-		function($scope, httpService, $state, $stateParams,$ionicPopup, $http){
+	.controller('orderListCtrl', ['$scope','httpService', '$state', '$stateParams','$ionicScrollDelegate', '$ionicPopup','$http',
+		function($scope, httpService, $state, $stateParams, $ionicScrollDelegate, $ionicPopup, $http){
 		$scope.order = {
 			canBeLoaded: false,
 			mostData: false,
 			content: [],
+			showNoOrderText: false,
 			// startTime: '',
 			// endTime: '',
 			date: new Date().toISOString(),
@@ -329,21 +333,49 @@ angular.module('starter.controller' , [])
 			oldMaxCount: 0
 		};
 		$scope.$on("$ionicView.beforeEnter", function(){
+			// $ionicScrollDelegate.scrollTop();
+			$scope.order = {
+				count: 5,
+				oldCount: 0,
+				oldMaxCount: 0
+			};
 			httpService.get("/order/getMyOldOrders/" + $scope.order.count +"/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
 			.success(function(data){
 				if(data.status){
 					var orderData = data.data,
 						orderArray = orderData.orders,
 						len = orderArray.length;
-					$scope.order.content = orderArray;
-					$scope.order.oldCount = len;
-					$scope.order.oldMaxCount = orderData.maxCount;
-					// $scope.order.endTime = orderArray[0].createdOn;
-					// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
-					$scope.order.canBeLoaded = true;
+					if(orderData.maxCount > 0){
+						$scope.order.content = orderArray;
+						$scope.order.oldCount = len;
+						$scope.order.oldMaxCount = orderData.maxCount;
+						// $scope.order.endTime = orderArray[0].createdOn;
+						// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
+						$scope.order.canBeLoaded = true;
+						$scope.order.showNoOrderText = false;
 
-					if(len == orderData.maxCount){
-						$scope.order.mostData = true;							
+						if(len == orderData.maxCount){
+							$scope.order.mostData = true;							
+						}						
+					}else {
+						$scope.order.content = orderArray;
+						$scope.order.oldCount = len;
+						$scope.order.oldMaxCount = orderData.maxCount;
+
+						$ionicPopup.confirm({
+							title: "发布关键字筛选结果",
+							template: "没有匹配关键字的订单，重新发布关键字！",
+							okText: "确认",
+							cancelText: "取消",
+							okType: "button-my-balanced",
+							cancelType: "button-stable"
+						}).then(function(data){
+							if(data){
+								$state.go("supplier.release");
+							}else{
+								$scope.order.showNoOrderText = true;
+							}
+						})
 					}
 				}
 			})			
