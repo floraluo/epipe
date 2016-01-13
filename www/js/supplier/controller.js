@@ -1,8 +1,7 @@
 angular.module('starter.controller' , [])
 
 .controller('SupplierCtrl', ['$rootScope', '$scope', '$state','$ionicHistory', '$ionicTabsDelegate',
-			 function($rootScope, $scope, $state,$ionicHistory, $ionicTabsDelegate){
-
+	function($rootScope, $scope, $state,$ionicHistory, $ionicTabsDelegate){
 	$rootScope.myGoBack = function(){
 		var backViewName = $ionicHistory.viewHistory().backView.stateName;
 		if( backViewName == 'supplier.quotation'){
@@ -18,11 +17,18 @@ angular.module('starter.controller' , [])
 		$ionicHistory.goBack();
 	}
 	// $rootScope.sideMunus = true;
-	$rootScope.main = {};
-	// 是否滑动内容区域打开side menu
-	$rootScope.main.dragContent = true;
-	// 是否隐藏tabs
-	$rootScope.main.hideTabs = false;
+
+	$rootScope.main = {
+		dragContent: true,	// 是否滑动内容区域打开side menu
+		hideTabs: false		// 是否隐藏tabs
+	};
+
+	// 退出登录
+	$scope.logout = function(){
+		window.localStorage.token = null;
+		$ionicHistory.clearHistory();
+		$ionicHistory.clearCache();				
+	}
 }])
     .controller('homeCtrl', ['$scope','$ionicHistory','$rootScope', function($scope, $ionicHistory, $rootScope) {
     	// 禁用登录、注册页滑动打开侧边栏
@@ -63,8 +69,8 @@ angular.module('starter.controller' , [])
 	                userType: "供应商"
 	            }).success(function(data) {
 	                if (data.status) {
-	                    console.log('success');
 	                    window.localStorage.token = data.token;
+	                    window.localStorage.come = true;
 	                    $state.go("supplier.release");
 	                } else {
 	                    // if(data.user == null){
@@ -249,16 +255,16 @@ angular.module('starter.controller' , [])
 				if(myform.$dirty){
 					httpService.post("/user/changePassword",{
 						oldPassword: $scope.supplier.oldPassword,
-						newPassword: $scope.supplier.newPassword
+						password: $scope.supplier.newPassword
 					})
 					.success(function(data){
 						if(data.status){
-							var promise = $ionicPopup.alert({
+							$ionicPopup.alert({
 								template: "密码修改成功！",
 								okText: "确认",
 								okType: "button-my-balanced"
 							})
-							promise.then(function(data){
+							.then(function(data){
 								if(data){
 									$state.go("supplier.personal");
 								}
@@ -321,66 +327,59 @@ angular.module('starter.controller' , [])
 	.controller('orderListCtrl', ['$scope','httpService', '$state', '$stateParams','$ionicScrollDelegate', '$ionicPopup','$http',
 		function($scope, httpService, $state, $stateParams, $ionicScrollDelegate, $ionicPopup, $http){
 		$scope.order = {
-			canBeLoaded: false,
-			mostData: false,
-			content: [],
-			showNoOrderText: false,
+			canBeLoaded: false,		//infinite-scroll能否触发
+			mostData: false,		//订单加载是否返回所有数据
+			content: [],			//订单内容
+			showNoOrderText: false,	//是否显示无数据提示文字
 			// startTime: '',
 			// endTime: '',
-			date: new Date().toISOString(),
-			count: 5,
-			oldCount: 0,
-			oldMaxCount: 0
+			// date: new Date().toISOString(),
+			count: 5,		//要请求的数量
+			oldCount: 0,	//当前页面上订单条数
+			oldMaxCount: 0	//所有记录总数，后端返回，初始为0
 		};
-		$scope.$on("$ionicView.beforeEnter", function(){
-			// $ionicScrollDelegate.scrollTop();
-			$scope.order = {
-				count: 5,
-				oldCount: 0,
-				oldMaxCount: 0
-			};
-			httpService.get("/order/getMyOldOrders/" + $scope.order.count +"/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
-			.success(function(data){
-				if(data.status){
-					var orderData = data.data,
-						orderArray = orderData.orders,
-						len = orderArray.length;
-					if(orderData.maxCount > 0){
-						$scope.order.content = orderArray;
-						$scope.order.oldCount = len;
-						$scope.order.oldMaxCount = orderData.maxCount;
-						// $scope.order.endTime = orderArray[0].createdOn;
-						// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
-						$scope.order.canBeLoaded = true;
-						$scope.order.showNoOrderText = false;
 
-						if(len == orderData.maxCount){
-							$scope.order.mostData = true;							
-						}						
-					}else {
-						$scope.order.content = orderArray;
-						$scope.order.oldCount = len;
-						$scope.order.oldMaxCount = orderData.maxCount;
+		// 获取订单
+		httpService.get("/order/getMyOldOrders/" + $scope.order.count +"/" +$scope.order.oldCount+ "/" + $scope.order.oldMaxCount)
+		.success(function(data){
+			if(data.status){
+				var orderData = data.data,
+					orderArray = orderData.orders,
+					len = orderArray.length;
+				if(orderData.maxCount > 0){
+					$scope.order.content = orderArray;
+					$scope.order.oldCount = len;
+					$scope.order.oldMaxCount = orderData.maxCount;
+					// $scope.order.endTime = orderArray[0].createdOn;
+					// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
+					$scope.order.canBeLoaded = true;
+					$scope.order.showNoOrderText = false;
 
-						$ionicPopup.confirm({
-							title: "发布关键字筛选结果",
-							template: "没有匹配关键字的订单，重新发布关键字！",
-							okText: "确认",
-							cancelText: "取消",
-							okType: "button-my-balanced",
-							cancelType: "button-stable"
-						}).then(function(data){
-							if(data){
-								$state.go("supplier.release");
-							}else{
-								$scope.order.showNoOrderText = true;
-							}
-						})
-					}
+					if(len == orderData.maxCount){
+						$scope.order.mostData = true;							
+					}						
+				}else {
+					$scope.order.content = orderArray;
+					$scope.order.oldCount = len;
+					$scope.order.oldMaxCount = orderData.maxCount;
+
+					$ionicPopup.confirm({
+						title: "发布关键字筛选结果",
+						template: "没有匹配关键字的订单，重新发布关键字！",
+						okText: "确认",
+						cancelText: "取消",
+						okType: "button-my-balanced",
+						cancelType: "button-stable"
+					}).then(function(data){
+						if(data){
+							$state.go("supplier.release");
+						}else{
+							$scope.order.showNoOrderText = true;
+						}
+					})
 				}
-			})			
+			}
 		})
-		$scope.amount = 0;//测试数据
 
 		// 刷新订单列表
 		$scope.loadNewOrderList = function(){
@@ -542,85 +541,54 @@ angular.module('starter.controller' , [])
 			}
 		})
 	}])
-// 物流跟踪
-.controller('LogisTrackCtrl', ['$scope','httpService', '$stateParams', '$ionicTabsDelegate', 
-	function($scope,httpService, $stateParams, $ionicTabsDelegate){
-	// 隐藏tabs
-	$ionicTabsDelegate.showBar(false);
-	$scope.logistics={
-		info: ""
-	};
-	// 物流信息
-	httpService.get("/order/getLogistics/" + $stateParams.orderId)
-	.success(function(data){
-		if(data.status){
-			var dataArray = data.data;
-			$scope.transit = dataArray;
-		}
-	})
+	// 物流跟踪
+	.controller('LogisTrackCtrl', ['$scope','httpService', '$stateParams', '$ionicTabsDelegate', 
+		function($scope,httpService, $stateParams, $ionicTabsDelegate){
 
-	// 订单信息
-	httpService.get("/order/getByOrderName/" + $stateParams.orderId)
-	.success(function(data){
-		if(data.status){
-			$scope.order = data.data
-		}
-	})
+		// 隐藏tabs
+		$ionicTabsDelegate.showBar(false);
+		$scope.logistics={
+			info: ""
+		};
 
-	// 添加物流信息
-	$scope.addLogisticsInfo = function(info){
-		httpService.post("/order/addLogistics", {
-			orderName: $stateParams.orderId,
-			info: info
-		})
+		// 物流信息
+		httpService.get("/order/getLogistics/" + $stateParams.orderId)
 		.success(function(data){
 			if(data.status){
-				$scope.transit.unshift(data.data);
+				var dataArray = data.data;
+				$scope.transit = dataArray;
 			}
 		})
-		$scope.logistics.info = "";
-	}
-	// $http.get("../data/transit_step.json")
-	// .success(function(data){
-	// 	$scope.transit = data;
-	// 	$scope.thisOrder = data.orderInfo;	
-	// })
-	// $http.get("../data/orderDetail"+$stateParams.orderId+".json")
-	// .success(function(data){
-	// 	$scope.thisOrder = data;
-	// })
-}])
-.controller('tabsCtrl', function($scope, $rootScope, $state) {
-	$rootScope.$on('$ionicView.beforeEnter', function() {
 
-		// $rootScope.hideTabs = false;
+		// 订单信息
+		httpService.get("/order/getByOrderName/" + $stateParams.orderId)
+		.success(function(data){
+			if(data.status){
+				$scope.order = data.data
+			}
+		})
 
-		// if ($state.current.name === 'tabs.events-create') {
-		// 	$rootScope.hideTabs = true;
-  //   	}
-	});
-})
-.controller('LogoutCtrl', ['$scope','$ionicHistory', 'supplier', function($scope, $ionicHistory, supplier){
-	var promise = supplier.getSupplierInfo();
-	$scope.logout = function(){
-		promise.then(function(data){
-			data.login = false;
-			// $state.go("supplier.home");
-			$ionicHistory.clearHistory()
-			$ionicHistory.clearCache()
-			// window.location.reload();
-			// console.log($ionicHistory)
-		})		
-	}
-}])
-// .controller('RootCtrl', ['$scope','$ionicHistory', function($scope,$ionicHistory){
-// 	$scope.side={
-// 		sideMunus: true
-// 	}
-// 	var currentState = $ionicHistory.viewHistory().stateName;
-// 	console.log("ccccc: "+$ionicHistory.viewHistory());
-// 	if( currentState == 'supplier.login' || currentState == 'supplier.register'){
-// 		$scope.side.sideMunus = false;
-// 		console.log('login')
+		// 添加物流信息
+		$scope.addLogisticsInfo = function(info){
+			httpService.post("/order/addLogistics", {
+				orderName: $stateParams.orderId,
+				info: info
+			})
+			.success(function(data){
+				if(data.status){
+					$scope.transit.unshift(data.data);
+				}
+			})
+			$scope.logistics.info = "";
+		}
+	}])
+// 退出
+// .controller('LogoutCtrl', ['$scope','$ionicHistory', 'supplier', function($scope, $ionicHistory, supplier){
+// 	$scope.logout = function(){
+// 		window.localStorage.token = null;
+// 		$ionicHistory.clearHistory();
+// 		$ionicHistory.clearCache();
+// 		// $state.go("supplier.login")
+				
 // 	}
 // }])

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
 
-.run(function($ionicPlatform, $rootScope, $state, $stateParams) {
+.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory) {
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
     $rootScope.appReady.status = true;
@@ -26,11 +26,39 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
   });
+
+  $ionicPlatform.registerBackButtonAction(function(e){
+    if($state.current.name=="supplier.release" ||$state.current.name=="supplier.orderList" || $state.current.name=="supplier.personal" ){
+      e.preventDefault();
+      $ionicPopup.confirm({
+        template: "确认要退出采购宝吗？",
+        okText: "确认",
+        cancelText: "取消",
+        okType: "button-my-balanced",
+        cancelType: "button-stable"
+      })
+      .then(function(data){
+        if(data){
+          ionic.Platform.exitApp();
+        }
+      })
+    }else {
+      $ionicHistory.goBack();
+    }
+  },100);
 })
 .config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider){
   $ionicConfigProvider.tabs.position('bottom').style('striped');
-  $urlRouterProvider.otherwise('supplier/home');
-  // $urlRouterProvider.otherwise('supplier/register');
+  if( window.localStorage.come ){
+    if(window.localStorage.token == null || window.localStorage.token == 'null'){
+      $urlRouterProvider.otherwise('supplier/login');
+    }else {
+      $urlRouterProvider.otherwise('supplier/release');      
+    }
+  }else {
+    $urlRouterProvider.otherwise('supplier/home');        
+  }
+
 $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
   $stateProvider.state('supplier', {
     url: '/supplier',
@@ -125,6 +153,7 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
     }
   })
   .state('supplier.orderList', {
+    cache: false,
     url: '/orderList',
     views: {
       'tabPO': {
