@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
 
-.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory) {
+.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion) {
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
     $rootScope.appReady.status = true;
@@ -25,6 +25,20 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
 
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+
+    // ----------start 浏览器不支持获取app version 测试写法-----------------------
+    try{
+      $cordovaAppVersion.getVersionNumber().then(function (version) {
+        window.localStorage.appVersion = version;
+      });
+    } catch(error){
+      window.localStorage.appVersion = '0.0.1';
+    }
+    // ----------end  浏览器不支持获取app version 测试写法-----------------------
+
+    // $cordovaAppVersion.getVersionNumber().then(function (version) {
+    //  window.localStorage.appVersion = version;
+    // }); 
   });
 
   $ionicPlatform.registerBackButtonAction(function(e){

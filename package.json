@@ -2,11 +2,9 @@
   "name": "epipe-app",
   "version": "1.1.1",
   "description": "epipe-app: An Ionic project",
-
   "dependencies": {
-    "angular-cookies": "^1.4.8"   
+    "angular-cookies": "^1.4.8"
   },
-
   "devDependencies": {
     "bower": "^1.7.1",
     "grunt": "^0.4.5",
@@ -22,7 +20,11 @@
     "cordova-plugin-splashscreen",
     "com.ionic.keyboard",
     "org.apache.cordova.camera",
-    "cordova-plugin-camera"
+    "cordova-plugin-camera",
+    {
+      "locator": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+      "id": "cordova-plugin-app-version"
+    }
   ],
   "cordovaPlatforms": [
     "android"

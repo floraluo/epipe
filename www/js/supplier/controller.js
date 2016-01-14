@@ -380,6 +380,9 @@ angular.module('starter.controller' , [])
 				}
 			}
 		})
+		.error(function(data){
+			console.log(data);
+		})
 
 		// 刷新订单列表
 		$scope.loadNewOrderList = function(){
@@ -536,7 +539,7 @@ angular.module('starter.controller' , [])
 		.success(function(data){
 			$scope.order = data.data;
 			var orderState = $scope.order.state;
-			if(orderState == "未支付" || orderState == '已支付'){
+			if(orderState == "待支付" || orderState == "未支付" || orderState == '已支付'){
 				$scope.showDelivery = true;
 			}
 		})
