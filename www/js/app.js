@@ -4,8 +4,12 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
+.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion, $http,CONFIG) {
+  $http.get("http://www.epipe.cn/download/appConfig.json")
+  .then(function(data){
+    CONFIG.host=data.api_host;
+  })
 
-.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion) {
   $rootScope.appReady = {status:false};
   $ionicPlatform.ready(function() {
     $rootScope.appReady.status = true;

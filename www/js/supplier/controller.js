@@ -380,9 +380,6 @@ angular.module('starter.controller' , [])
 				}
 			}
 		})
-		.error(function(data){
-			console.log(data);
-		})
 
 		// 刷新订单列表
 		$scope.loadNewOrderList = function(){
@@ -488,12 +485,11 @@ angular.module('starter.controller' , [])
 					})
 					.success(function(data){
 						if(data.status){
-							var promise = $ionicPopup.alert({
+							$ionicPopup.alert({
 								template: "报价完成，返回订单列表",
 								okText: "确认",
 								okType: "button-my-balanced"
-							});
-							promise.then(function(data){
+							}).then(function(data){
 								if(data){
 									$state.go("supplier.orderList");								
 								}
@@ -585,13 +581,3 @@ angular.module('starter.controller' , [])
 			$scope.logistics.info = "";
 		}
 	}])
-// 退出
-// .controller('LogoutCtrl', ['$scope','$ionicHistory', 'supplier', function($scope, $ionicHistory, supplier){
-// 	$scope.logout = function(){
-// 		window.localStorage.token = null;
-// 		$ionicHistory.clearHistory();
-// 		$ionicHistory.clearCache();
-// 		// $state.go("supplier.login")
-				
-// 	}
-// }])
