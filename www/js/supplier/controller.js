@@ -29,9 +29,10 @@ angular.module('starter.controller' , [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();				
 	}
+
 }])
-    .controller('homeCtrl', ['$scope', '$state', '$ionicHistory','$rootScope', '$ionicBackdrop', '$ionicLoading',
-    	function($scope, $state, $ionicHistory, $rootScope,$ionicBackdrop,$ionicLoading) {
+    .controller('homeCtrl', ['$scope', '$state', '$ionicHistory','$rootScope', '$ionicBackdrop', '$ionicLoading', '$ionicNavBarDelegate', '$timeout',
+    	function($scope, $state, $ionicHistory, $rootScope,$ionicBackdrop,$ionicLoading, $ionicNavBarDelegate,$timeout) {
     	// 禁用登录、注册页滑动打开侧边栏
     	$rootScope.main.dragContent = false;
 
@@ -54,9 +55,13 @@ angular.module('starter.controller' , [])
             }
         });
 
+        var timer;
 		$scope.homeButton = function(){
 			if(window.localStorage.token == null || window.localStorage.token == 'null'){
 				$state.go("supplier.login");
+				// timer = $timeout(function(){
+				// 	$ionicNavBarDelegate.showBar(true);
+				// },3000)
 			} else {
 				$state.go("supplier.release");
 			}
@@ -486,6 +491,15 @@ angular.module('starter.controller' , [])
 					okText: "确认",
 					okType: "button-my-balanced"
 				})
+			}
+		}
+
+		// 报价页or详情页
+		$scope.nextGeneration = function(state, name){
+			if(state == "报价")	{
+				$state.go("supplier.quotation", {orderId: name});
+			} else {
+				$state.go("supplier.orderDetail", {orderId: name});
 			}
 		}
 	}])

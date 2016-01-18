@@ -9,7 +9,7 @@
 			</div>			
 		</div>
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
-			<div class="item item-text-wrap order-info">
+			<a class="item item-text-wrap order-info" ng-click="nextGeneration(o.state,o.name)">
 				<div class="name">{{o.productName}}
 					<img src="img/authen.png" alt="" ng-if="o.o.purUer.ifAuditPass">
 					<img src="img/no_authen.png" alt="" ng-if="!o.o.purUer.ifAuditPass">
@@ -18,15 +18,15 @@
 				<div class="small amount">{{o.shipAddress}}</div>
 				<div class="small amount">数量：{{o.productAmount}}{{o.productUnit}}</div>
 				<div class="small date">{{ o.createdOn | date:'yyyy-MM-dd'}}</div>
-				<a class="state state-quote" href="#/supplier/quotation?orderId={{o.name}}"  ng-if="o.state=='报价'">
-					<i class="icon ion-android-star-outline"></i>
+				<div class="state " ng-class="{'state-quote': o.state=='报价'}" >
+					<i class="icon ion-android-star-outline"  ng-if="o.state=='报价'"></i>
 					{{o.state}}
-				</a>
-				<a class="state" href="#/supplier/orderDetail?orderId={{o.name}}" ng-if="o.state!='报价'">
+				</div>
+				<!-- <a class="state" ng-if="o.state!='报价'">
 					{{o.state}}
-				</a>
+				</a> -->
 				<a class="logistics-tracking" href="#/supplier/logisticsTracking?orderId={{o.name}}" ng-if="o.state=='已发货'">物流追踪<i class="iconfont icon-truck"></i></a>
-			</div>
+			</a>
 		</div>
 		<ion-infinite-scroll spinner="ios-small" ng-if="order.canBeLoaded" on-infinite="loadMoreOrder()" distance="1%" immediate-check="true">
 		</ion-infinite-scroll>

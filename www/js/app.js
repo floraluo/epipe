@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
-.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion,$http, CONFIG,$ionicTabsDelegate) {
+.run(function($ionicPlatform, $ionicPopup,$timeout, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion,$http, CONFIG,$ionicTabsDelegate) {
 
   $rootScope.appReady = {status:false,getHost:false};
   $ionicPlatform.ready(function() {
@@ -50,7 +50,10 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
   });
 
   $ionicPlatform.registerBackButtonAction(function(e){
-    if($state.current.name=="supplier.release" ||$state.current.name=="supplier.orderList" || $state.current.name=="supplier.personal" ){
+    if( $state.current.name=="supplier.release" 
+      || $state.current.name=="supplier.orderList" 
+      || $state.current.name=="supplier.personal" 
+      || $state.current.name=="supplier.login" ){
       e.preventDefault();
       $ionicPopup.confirm({
         template: "确认要退出采购宝吗？",
@@ -65,8 +68,10 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
         }
       })
     }else {
-      $ionicTabsDelegate.showBar(true);
       $ionicHistory.goBack();
+      $timeout(function(){
+        $ionicTabsDelegate.showBar(true);    
+      },300);
     }
   },100);
 })
@@ -93,9 +98,6 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
         templateUrl: 'views/supplier/main-menu.html',
         controller: 'SupplierCtrl'
       },
-      // 'headBar@supplier': {
-      //   templateUrl: 'tpl/menu-head-bar.html'
-      // },
       'main@supplier': {
         templateUrl: 'views/supplier/tabs.html'
       }
@@ -111,7 +113,6 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
     }
   })
   .state('supplier.login', {
-    cache: false,
     url: '/login',
     views: {
       'main': {
