@@ -349,22 +349,32 @@ angular.module('starter.controller' , [])
 		// 发布关键字
 		$scope.releaseKeywords = function(){
 			var cleanArray = $scope.cleanArray($scope.keywords);
-			httpService.post("/keywords/setKeywords",{
-				keywords: cleanArray
-			})
-			.success(function(data){
-				if(data.status){
-					var keywordsStr = cleanArray.toString();
-					$state.go("supplier.orderList");
-				}else{
-					$ionicPopup.alert({
-						title: "关键字发布结果",
-						template: data.errMsg,
-						okText: "确定",
-						okType: "button-my-balanced"
-					})
-				}
-			})
+			if(cleanArray.length == 0){
+				$ionicPopup.alert({
+					title: "关键字发布结果",
+					template: "关键字不能为空，请重新发布！",
+					okText: "确定",
+					okType: "button-my-balanced"
+				})
+			} else {
+				httpService.post("/keywords/setKeywords",{
+					keywords: cleanArray
+				})
+				.success(function(data){
+					if(data.status){
+						var keywordsStr = cleanArray.toString();
+						$state.go("supplier.orderList");
+					}else{
+						$ionicPopup.alert({
+							title: "关键字发布结果",
+							template: data.errMsg,
+							okText: "确定",
+							okType: "button-my-balanced"
+						})
+					}
+				})
+			}
+			
 		}
 	}])
 
@@ -502,6 +512,11 @@ angular.module('starter.controller' , [])
 				$state.go("supplier.orderDetail", {orderId: name});
 			}
 		}
+
+		// 
+		$scope.nextLogis = function(name){
+			$state.go("supplier.logisticsTracking", {orderId: name});
+		}
 	}])
 	// 报价
 	.controller('quotationCtrl', ['$scope', '$ionicPopup', 'httpService', '$state', '$stateParams','$ionicHistory', '$ionicTabsDelegate', 
@@ -564,7 +579,8 @@ angular.module('starter.controller' , [])
 								okType: "button-my-balanced"
 							}).then(function(data){
 								if(data){
-									$state.go("supplier.orderList");								
+									$state.go("supplier.orderList");
+									$ionicTabsDelegate.showBar(true);
 								}
 							})
 						}

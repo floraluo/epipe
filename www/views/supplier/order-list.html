@@ -9,7 +9,7 @@
 			</div>			
 		</div>
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
-			<a class="item item-text-wrap order-info" ng-click="nextGeneration(o.state,o.name)">
+			<div class="item item-text-wrap order-info" ng-click="nextGeneration(o.state,o.name)">
 				<div class="name">{{o.productName}}
 					<img src="img/authen.png" alt="" ng-if="o.o.purUer.ifAuditPass">
 					<img src="img/no_authen.png" alt="" ng-if="!o.o.purUer.ifAuditPass">
@@ -25,8 +25,8 @@
 				<!-- <a class="state" ng-if="o.state!='报价'">
 					{{o.state}}
 				</a> -->
-				<a class="logistics-tracking" href="#/supplier/logisticsTracking?orderId={{o.name}}" ng-if="o.state=='已发货'">物流追踪<i class="iconfont icon-truck"></i></a>
-			</a>
+				<div class="logistics-tracking" ng-click="nextLogis(o.name); $event.stopPropagation();" ng-if="o.state=='已发货'">物流追踪<i class="iconfont icon-truck"></i></div>
+			</div>
 		</div>
 		<ion-infinite-scroll spinner="ios-small" ng-if="order.canBeLoaded" on-infinite="loadMoreOrder()" distance="1%" immediate-check="true">
 		</ion-infinite-scroll>
