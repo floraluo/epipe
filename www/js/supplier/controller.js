@@ -371,6 +371,8 @@ angular.module('starter.controller' , [])
 			mostData: false,		//订单加载是否返回所有数据
 			content: [],			//订单内容
 			showNoOrderText: false,	//是否显示无数据提示文字
+			noOrderText: '',
+			noOrderTitle: '采购单搜索结果',
 			// startTime: '',
 			// endTime: '',
 			// date: new Date().toISOString(),
@@ -403,7 +405,7 @@ angular.module('starter.controller' , [])
 					$scope.order.oldMaxCount = orderData.maxCount;
 
 					$ionicPopup.confirm({
-						title: "采购单筛选结果",
+						title: $scope.order.noOrderTitle,
 						template: "暂无匹配的订单！",
 						okText: "返回",
 						cancelText: "留在此页",
@@ -414,9 +416,27 @@ angular.module('starter.controller' , [])
 							$state.go("supplier.release");
 						}else{
 							$scope.order.showNoOrderText = true;
+							$scope.order.noOrderText = '暂无匹配的订单！';
 						}
 					})
 				}
+			} else {
+				var errMsg = data.errMsg;
+				$ionicPopup.confirm({
+					title: $scope.order.noOrderTitle,
+					template: errMsg,
+					okText: "添加关键字",
+					cancelText: "留在此页",
+					okType: "button-my-balanced",
+					cancelType: "button-stable"
+				}).then(function(data){
+					if(data){
+						$state.go("supplier.release");
+					}else{
+						$scope.order.showNoOrderText = true;
+						$scope.order.noOrderText = errMsg;
+					}
+				})
 			}
 		})
 
