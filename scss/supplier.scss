@@ -177,6 +177,14 @@ form{
 			padding: 10px;
 			>.name{
 				padding-right: 3em;
+				>img{
+					width: 27px;
+					vertical-align: -30%;
+					margin-left: 5px;
+				}
+				>small{
+					color: #4C4C4C;
+				}
 			}
 			>.state{
 				position: absolute;

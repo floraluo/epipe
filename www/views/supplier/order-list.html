@@ -3,14 +3,18 @@
 		<ion-refresher snipper="ios-small" on-refresh="loadNewOrderList()" pulling-text="下拉更新订单列表...">
 		</ion-refresher>		
 		<div class="card" ng-show="order.showNoOrderText">
-			  <div class="item item-divider">关键字搜索结果</div>
+			  <div class="item item-divider">采购单搜索结果</div>
 			<div class="item item-text-wrap text-center">
-				<p class="padding">没有与关键字匹配的订单</p>
+				<p class="padding">暂无匹配的订单！</p>
 			</div>			
 		</div>
 		<div class="card card-round" ng-repeat="o in order.content track by $index">
 			<div class="item item-text-wrap order-info">
-				<div class="name">{{o.productName}}</div>
+				<div class="name">{{o.productName}}
+					<img src="img/authen.png" alt="" ng-if="o.o.purUer.ifAuditPass">
+					<img src="img/no_authen.png" alt="" ng-if="!o.o.purUer.ifAuditPass">
+					<small ng-hide="o.purUer.ifAuditPass">未认证</small>
+				</div>
 				<div class="small amount">数量：{{o.productAmount}}{{o.productUnit}}</div>
 				<div class="small date">{{ o.createdOn | date:'yyyy-MM-dd'}}</div>
 				<a class="state state-quote" href="#/supplier/quotation?orderId={{o.name}}"  ng-if="o.state=='报价'">

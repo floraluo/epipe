@@ -30,7 +30,8 @@ angular.module('starter.controller' , [])
 		$ionicHistory.clearCache();				
 	}
 }])
-    .controller('homeCtrl', ['$scope','$ionicHistory','$rootScope', function($scope, $ionicHistory, $rootScope) {
+    .controller('homeCtrl', ['$scope', '$state', '$ionicHistory','$rootScope', '$ionicBackdrop', '$ionicLoading',
+    	function($scope, $state, $ionicHistory, $rootScope,$ionicBackdrop,$ionicLoading) {
     	// 禁用登录、注册页滑动打开侧边栏
     	$rootScope.main.dragContent = false;
 
@@ -38,6 +39,28 @@ angular.module('starter.controller' , [])
 		$ionicHistory.nextViewOptions({
 			disableBack: true
 		});
+
+		// 未获取到host显示背景
+		$ionicBackdrop.retain();
+		$ionicLoading.show({
+            template: "<ion-spinner icon='ios' class='spinner spinner-ios '></ion-spinner>",
+            noBackdrop: true
+        });
+        var hostListener = $rootScope.$watch('appReady.getHost', function() {
+            if ($rootScope.appReady.getHost) {            	
+                $ionicBackdrop.release();
+                $ionicLoading.hide();
+                hostListener();
+            }
+        });
+
+		$scope.homeButton = function(){
+			if(window.localStorage.token == null || window.localStorage.token == 'null'){
+				$state.go("supplier.login");
+			} else {
+				$state.go("supplier.release");
+			}
+		}
     }])
     // 登录
 	.controller('loginCtrl', ['$scope', '$rootScope', '$ionicPopup', 'httpService', '$state', 
@@ -77,7 +100,7 @@ angular.module('starter.controller' , [])
 	                    // 	$scope.supplier.noRegiste = true;
 	                    // }
 	                    $ionicPopup.alert({
-	                        template: "用户名或密码错误"
+	                        template: data.errMsg
 	                    })
 	                }
 	            });
@@ -287,11 +310,27 @@ angular.module('starter.controller' , [])
 		$rootScope.main.dragContent = true;
 
 		$scope.keywords=["", "", ""];
+
+		// 获取关键字
+		httpService.get("/keywords/getKeywords")
+		.success(function(data){
+			if(data.status){
+				var keywordsArray = data.data.keywords,
+					len = keywordsArray.length;
+				$scope.keywords = keywordsArray;
+				if(len < 3){
+					for(var i =len; i<3; i++ ){
+						$scope.keywords.push("");
+					}
+				}
+			}
+		})
 		$scope.addKeywords = function(){
 			$timeout(function(){
 				$scope.keywords.push("")
 			},10)
 		};
+		// 清除数组中空数据
 		$scope.cleanArray = function(array){
 			var newArray = [];
 			for(var i=0; i<array.length; i++){
@@ -301,6 +340,8 @@ angular.module('starter.controller' , [])
 			}
 			return newArray;
 		}
+
+		// 发布关键字
 		$scope.releaseKeywords = function(){
 			var cleanArray = $scope.cleanArray($scope.keywords);
 			httpService.post("/keywords/setKeywords",{
@@ -309,15 +350,14 @@ angular.module('starter.controller' , [])
 			.success(function(data){
 				if(data.status){
 					var keywordsStr = cleanArray.toString();
-					// $ionicPopup.alert({
-					// 	title: "关键字发布成功",
-					// 	template:keywordsStr,
-					// 	okText: "确认",
-					// 	okType: "button-my-balanced"
-					// });
-					$scope.keywords=["", "", ""];
-
 					$state.go("supplier.orderList");
+				}else{
+					$ionicPopup.alert({
+						title: "关键字发布结果",
+						template: data.errMsg,
+						okText: "确定",
+						okType: "button-my-balanced"
+					})
 				}
 			})
 		}
@@ -350,24 +390,23 @@ angular.module('starter.controller' , [])
 					$scope.order.content = orderArray;
 					$scope.order.oldCount = len;
 					$scope.order.oldMaxCount = orderData.maxCount;
-					// $scope.order.endTime = orderArray[0].createdOn;
-					// $scope.order.startTime = orderArray[$scope.order.count-1].createdOn;
+
 					$scope.order.canBeLoaded = true;
 					$scope.order.showNoOrderText = false;
 
 					if(len == orderData.maxCount){
 						$scope.order.mostData = true;							
-					}						
+					}
 				}else {
 					$scope.order.content = orderArray;
 					$scope.order.oldCount = len;
 					$scope.order.oldMaxCount = orderData.maxCount;
 
 					$ionicPopup.confirm({
-						title: "发布关键字筛选结果",
-						template: "没有匹配关键字的订单，重新发布关键字！",
-						okText: "确认",
-						cancelText: "取消",
+						title: "采购单筛选结果",
+						template: "暂无匹配的订单！",
+						okText: "返回",
+						cancelText: "留在此页",
 						okType: "button-my-balanced",
 						cancelType: "button-stable"
 					}).then(function(data){

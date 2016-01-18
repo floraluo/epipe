@@ -26,7 +26,13 @@ angular.module('starter.service', [])
 				console.info(config);
 				console.log('--------');
 
-                return $http.post(CONFIG.host + url,params,config).success(function() {
+                var host = '';
+                if(CONFIG.serveHost){
+                    host = CONFIG.serveHost;
+                }else {
+                    host = CONFIG.host;
+                }
+                return $http.post(host + url,params,config).success(function() {
 
                     $ionicBackdrop.release();
                     $ionicLoading.hide();
@@ -61,8 +67,13 @@ angular.module('starter.service', [])
 				console.log('--------');
 				console.info(config);
 				console.log('--------');
-
-                return $http.get(CONFIG.host + url,config).success(function() {
+                var host = '';
+                if(CONFIG.serveHost){
+                    host = CONFIG.serveHost;
+                }else {
+                    host = CONFIG.host;
+                }
+                return $http.get(host + url,config).success(function() {
 
                     $ionicBackdrop.release();
                     $ionicLoading.hide();

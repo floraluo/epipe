@@ -11850,6 +11850,14 @@ form .error {
 .supplier .order-list .item > .name {
   padding-right: 3em;
 }
+.supplier .order-list .item > .name > img {
+  width: 27px;
+  vertical-align: -30%;
+  margin-left: 5px;
+}
+.supplier .order-list .item > .name > small {
+  color: #4C4C4C;
+}
 .supplier .order-list .item > .state {
   position: absolute;
   right: 10px;

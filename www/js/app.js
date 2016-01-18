@@ -4,14 +4,18 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
-.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion, $http,CONFIG) {
-  $http.get("http://www.epipe.cn/download/appConfig.json")
-  .then(function(data){
-    CONFIG.host=data.api_host;
-  })
+.run(function($ionicPlatform, $ionicPopup, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion,$http, CONFIG,$ionicTabsDelegate) {
 
-  $rootScope.appReady = {status:false};
+  $rootScope.appReady = {status:false,getHost:false};
   $ionicPlatform.ready(function() {
+    $http.get("http://www.epipe.cn/download/appConfig.js")
+    .then(function(data){
+      // CONFIG['serveHost']=data.data.api_host;
+      CONFIG['serveHost']='http://192.168.1.154:8083';
+      $rootScope.appReady.getHost = true;
+    },function(){
+      $rootScope.appReady.getHost = true;
+    })
     $rootScope.appReady.status = true;
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -61,21 +65,24 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
         }
       })
     }else {
+      $ionicTabsDelegate.showBar(true);
       $ionicHistory.goBack();
     }
   },100);
 })
 .config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider){
   $ionicConfigProvider.tabs.position('bottom').style('striped');
-  if( window.localStorage.come ){
-    if(window.localStorage.token == null || window.localStorage.token == 'null'){
-      $urlRouterProvider.otherwise('supplier/login');
-    }else {
-      $urlRouterProvider.otherwise('supplier/release');      
-    }
-  }else {
-    $urlRouterProvider.otherwise('supplier/home');        
-  }
+  $urlRouterProvider.otherwise('supplier/home');
+
+  // if( window.localStorage.come ){
+  //   if(window.localStorage.token == null || window.localStorage.token == 'null'){
+  //     $urlRouterProvider.otherwise('supplier/login');
+  //   }else {
+  //     $urlRouterProvider.otherwise('supplier/release');      
+  //   }
+  // }else {
+  //   $urlRouterProvider.otherwise('supplier/home');        
+  // }
 
 $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
   $stateProvider.state('supplier', {
@@ -113,18 +120,6 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
       }
     }
   })
-  // .state('login', {
-  //   url: '/login',
-  //   views: {
-  //     '': {
-  //       templateUrl: 'tpl/main-menu.html'
-  //     },
-  //     'supplierLogin': {
-  //       templateUrl: 'views/supplier/login.html',
-  //       controller: 'loginCtrl'       
-  //     }
-  //   }
-  // })
   .state('supplier.register', {
     url: '/register',
     views: {
