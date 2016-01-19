@@ -11789,6 +11789,10 @@ form .error {
   color: #ff7200;
   background-color: #fff;
 }
+.supplier .top-icon > i.register {
+  color: #fff;
+  background-color: #24ccab;
+}
 .supplier .card-round {
   border-radius: 10px;
 }

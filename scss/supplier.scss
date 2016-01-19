@@ -104,6 +104,10 @@ form{
 			line-height: 5rem;
 			color: #ff7200;
 			background-color: #fff;
+			&.register{
+				color: #fff;
+				background-color: #24ccab;
+			}
 		}
 	}
 	.clearfix{
