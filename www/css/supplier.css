@@ -11766,9 +11766,15 @@ form .error {
   bottom: 0;
 }
 
-.supplier .item-img > div {
+.supplier .item-img {
   padding: 10px;
+}
+.supplier .item-img > div {
   text-align: center;
+  margin-bottom: 10px;
+}
+.supplier .item-img > div > img {
+  max-width: 100%;
 }
 .supplier .top-icon {
   position: relative;
@@ -12032,8 +12038,8 @@ form .error {
 }
 .supplier .personal-center .bottom-info {
   position: absolute;
-  bottom: 0;
-  height: 60%;
+  top: 40%;
+  min-height: 60%;
   width: 100%;
   color: #313131;
   line-height: 2;

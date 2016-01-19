@@ -71,9 +71,13 @@ form{
 .supplier{
 	// register.html
 	.item-img {
+		padding: 10px;
 		>div {
-			padding: 10px;
-			text-align: center
+			text-align: center;
+			margin-bottom: 10px;
+			>img{
+				max-width: 100%;
+			}
 		}
 	}
 	// .item-img {
@@ -376,8 +380,9 @@ form{
 		}
 		.bottom-info{
 			position: absolute;
-			bottom: 0;
-			height: 60%;
+			// bottom: 0;
+			top: 40%;
+			min-height: 60%;
 			width: 100%;
 			color: #313131;
 			line-height: 2;

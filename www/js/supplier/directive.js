@@ -70,8 +70,10 @@ angular.module('starter.directive' , [])
 }])
 .directive('selectImg', ['$ionicActionSheet', 
 						'$cordovaCamera',
+						'$cordovaFileTransfer',
 						'$ionicPopup',
-						function($ionicActionSheet, $cordovaCamera,$ionicPopup){
+						"CONFIG",
+						function($ionicActionSheet, $cordovaCamera, $cordovaFileTransfer,$ionicPopup,CONFIG){
 	return {
 		restrict: 'A',
 		link: function(scope, element){
@@ -82,37 +84,75 @@ angular.module('starter.directive' , [])
 						{text: '<i class="icon ion-android-image royal"></i>从图库选择'}
 					],
 					buttonClicked: function(index){
+						var host = '',
+							appVersion = window.localStorage.appVersion,
+							uploadOptions = {
+								headers: {
+									'x-app-version': appVersion
+								}
+							};
+						if(CONFIG.serveHost){
+							host = CONFIG.serveHost;
+						}else {
+							host = CONFIG.host;
+						}
 						if(index == 0){
-							var options = {
-								quality: 50, 
+							var picOptions = {
+								quality: 70, 
 								destinationType: 1, 
 								sourceType: 1,
-								targetHeight: 200,
-								targetWidth: 200,
+								targetHeight: 300,
+								targetWidth: 300,
 							};
-							$cordovaCamera
-							.getPicture(options)
+							$cordovaCamera.getPicture(picOptions)
 							.then(function(imageURI){
-								scope.userRegisInfo.myCredentials.push(imageURI);
-								hideSheet();
+								$cordovaFileTransfer.upload(host+"/upload/image", imageURI, uploadOptions)
+								.then(function(result) {
+									console.log("success")
+									var response = JSON.parse(result.response);
+									if(response.status){
+										scope.supplierInfo.userProfile.credentials.push(host+"/public/uploaded/"+response.data.fileName);
+										hideSheet();
+										$ionicPopup.alert({
+											template: "上传成功",
+											okText: "确认",
+											okType: "button-my-balanced"
+										})
+									}
+								}, function(err) {
+									// Error
+									console.log(err);
+								});
 							}, function(err){
-								alert(err);
+								// alert(err);
+								console.log(err)
 							})
 						}else if(index == 1){
 							window.imagePicker.getPictures(
 								function(results) {
 									hideSheet();
+									
 									for (var i = 0; i < results.length; i++) {
 										// console.log('Image URI: ' + results[i]);
-										scope.userRegisInfo.myCredentials.push(results[i]);
+										// scope.supplierInfo.userProfile.credentials.push(results[i]);
+										$cordovaFileTransfer.upload(host+"/upload/image", results[i], uploadOptions)
+										.then(function(result) {
+											var response = JSON.parse(result.response);
+
+											if(response.status){
+												// alert(host+"/public/uoloaded/"+response.data.fileName)
+												scope.supplierInfo.userProfile.credentials.push(host+"/public/uploaded/"+response.data.fileName);
+												// hideSheet();										
+											}
+										});
 									}
 								}, function (error) {
 									// console.log('Error: ' + error);
 									alert('imagePicker.getPictures:  '+error)
 								},{
-									// maximumImagesCount: 3,
-									width: 260,
-									height: 260,
+									maximumImagesCount: 3,
+									width: 300,
+									height: 300,
 									quality: 70
 								}
 							);
@@ -120,19 +160,19 @@ angular.module('starter.directive' , [])
 					}
 				})
 			})
-			scope.onHoldImg = function(index) {
-				var confirmPopup = $ionicPopup.confirm({
-					okText: '确认',
-					okType: 'button-balanced',
-					cancelText: '取消',
-					template: '确认要删除这张图片吗？'
-				});
-				confirmPopup.then(function(res) {
-					if(res) {
-						scope.userRegisInfo.myCredentials.splice(index,1)
-					}
-				});
-			}
+			// scope.onHoldImg = function(index) {
+			// 	var confirmPopup = $ionicPopup.confirm({
+			// 		okText: '确认',
+			// 		okType: 'button-balanced',
+			// 		cancelText: '取消',
+			// 		template: '确认要删除这张图片吗？'
+			// 	});
+			// 	confirmPopup.then(function(res) {
+			// 		if(res) {
+			// 			scope.supplierInfo.userProfile.credentials.splice(index,1)
+			// 		}
+			// 	});
+			// }
 		}
 	}							
 }])

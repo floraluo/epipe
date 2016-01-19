@@ -223,12 +223,14 @@ angular.module('starter.controller' , [])
 		    if ($rootScope.appReady.status) $scope.ready = true;
 		});
 
-		$scope.supplier = {
+		$scope.supplierInfo = {
 	    	userType: '供应商',
 	        userProfile: {
-	        	company: ''
+	        	company: '',
+	        	credentials: []
 	        }
 	    }
+	    // 获取个人信息
 	    $scope.$on('$ionicView.beforeEnter', function() {
 			httpService.get("/user/getProfile")
 			.success(function(data){
@@ -242,12 +244,13 @@ angular.module('starter.controller' , [])
 
 		$scope.show_error = false;
 
+		// 修改个人信息
 		$scope.supplierModPerInfo = function(myform){		
 			$scope.show_error = true;
 			if(myform.$valid){
 
 				if(myform.$dirty){
-					httpService.post("/user/changeProfile",$scope.supplier)
+					httpService.post("/user/changeProfile",$scope.supplierInfo)
 					.success(function(data){
 						if(data.status){
 							var promise = $ionicPopup.alert({

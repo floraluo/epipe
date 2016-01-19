@@ -22,7 +22,17 @@
 					<i class="button-icon icon ion-compose" ui-sref="supplier.modifyProfile"></i>
 					<i class="button-icon icon ion-android-unlock" ui-sref="supplier.modifyPassword"></i>
 				</div>
-			</div>			
+			</div>	
+
+			<div class="list">
+				<button class="button button-full button-balanced button-my-balanced  button-round" ng-disabled="!ready" select-img type="button">上传证件</button>
+			</div>
+			<div class="item-img clearfix" ng-hide="supplierInfo.userProfile.credentials.length == 0">
+				<div ng-repeat='img in supplierInfo.userProfile.credentials track by $index'>
+					<img ng-src="{{img}}">
+					<!-- <img ng-src="{{img}}" with="100%" on-hold="onHoldImg($index)"> -->
+				</div>
+			</div>		
 		</div>
 	</ion-content>
 </ion-view>
