@@ -241,13 +241,9 @@ angular.module('starter.controller' , [])
 					$scope.supplierInfo = {
 						phone: profile.phone,
 						userProfile: {
-							company: profile.userProfile.company
+							company: profile.company
 						}
 					}
-					// $scope.supplier = {
-					// 	company: profile.company,
-					// 	phone: profile.phone
-					// }
 				})
     		// }
 		});
@@ -263,10 +259,7 @@ angular.module('starter.controller' , [])
 				if(myform.$dirty){
 					// $scope.supplierInfo.userProfile.company = $scope.supplier.company;
 					httpService.post("/user/changeProfile",{
-						userType: '供应商',
-						userProfile: {
-							company: $scope.supplierInfo.userProfile.company
-						}
+						company: $scope.supplierInfo.userProfile.company
 					})
 					.success(function(data){
 						if(data.status){
