@@ -52,3 +52,13 @@ $tabs-my-balanced-text:              $button-my-balanced-text !default;
   @include tabs-striped-color('tabs-color-my-balanced', $my-balanced);
 }
 @include tabs-color('tabs-color-my-balanced', $my-balanced);
+
+.my-balanced, a.my-balanced {
+  color: $my-balanced;
+}
+.my-balanced-bg {
+  background-color: $my-balanced;
+}
+.my-balanced-border {
+  border-color: $button-my-balanced-border;
+}

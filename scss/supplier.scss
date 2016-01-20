@@ -68,6 +68,28 @@ form{
   bottom: 0;
 }
 
+
+
+// .platform-android{
+	.order-screen{
+		background-color: #333;
+		.action-sheet{
+			margin-left: 8px;
+			margin-right: 8px;			
+		}
+		.action-sheet-group{
+			border-radius: 4px;
+			margin-bottom: 8px;
+			.button{
+				border-color: #d1d3d6;
+				text-align: center;
+				font-size: 21px;
+				color: #09A284;
+			}
+		}
+	}		
+// }
+
 .supplier{
 	// register.html
 	.item-img {
@@ -151,6 +173,7 @@ form{
 		text-align: center;
 		color: #ff7a00;
 	}
+
 	// home page
 	.home{
 		img{

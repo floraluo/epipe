@@ -1,4 +1,7 @@
 <ion-view view-title="采购单">
+	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-funnel" ng-click="selectOrderStatus()"></button>
+	</ion-nav-buttons>
 	<ion-content class="scroll-bg order-list">
 		<ion-refresher snipper="ios-small" on-refresh="loadNewOrderList()" pulling-text="下拉更新订单列表...">
 		</ion-refresher>		

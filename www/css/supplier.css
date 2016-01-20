@@ -11723,6 +11723,18 @@ a.button .icon:before, a.button.icon:before, a.button.icon-left:before, a.button
   opacity: 1;
 }
 
+.my-balanced, a.my-balanced {
+  color: #24ccab;
+}
+
+.my-balanced-bg {
+  background-color: #24ccab;
+}
+
+.my-balanced-border {
+  border-color: #1ca187;
+}
+
 html {
   font-size: 62.5%;
 }
@@ -11764,6 +11776,24 @@ form .error {
 
 .keyboard-open .hide-tabs .has-tabs {
   bottom: 0;
+}
+
+.order-screen {
+  background-color: #333;
+}
+.order-screen .action-sheet {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.order-screen .action-sheet-group {
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.order-screen .action-sheet-group .button {
+  border-color: #d1d3d6;
+  text-align: center;
+  font-size: 21px;
+  color: #09A284;
 }
 
 .supplier .item-img {
