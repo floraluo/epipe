@@ -114,10 +114,31 @@ $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
   })
   .state('supplier.login', {
     url: '/login',
+    cache: false,
     views: {
       'main': {
         templateUrl: 'views/supplier/login.html',
         controller: 'loginCtrl'       
+      }
+    }
+  })
+  .state("supplier.fetchVerfication", {
+    url: '/fetchVerfication',
+    cache: false,
+    views: {
+      'main': {
+        templateUrl: 'views/supplier/fetch-verification.html',
+        controller: 'FetchVerificationCtrl'
+      }
+    }
+  })
+  .state('supplier.resetPassword', {
+    url: '/resetPassword/:phone/:code',
+    cache: false,
+    views: {
+      'main': {
+        templateUrl: 'views/supplier/reset-password.html',
+        controller: 'ResetPasswordCtrl'
       }
     }
   })

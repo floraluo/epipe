@@ -52,15 +52,15 @@
 
 			<div class="item item-input-inset">
 				<label class="item-input-wrapper">
-					<input name="code" ng-model='userRegisInfo.code' ng-keyup="verifyCode(userRegisInfo.code)" type="text" placeholder="验证码">
+					<input name="code" ng-model='userRegisInfo.code' ng-focus="captcha.code_is_error=false"  ng-pattern="/^\d{6}$/" type="text" placeholder="验证码">
 				</label>
 				<button class="button button-small button-balanced" ng-click="fetchCaptcha()" ng-disabled="captcha.disabled" type="button">{{captcha.text}}</button>
 			</div>
-			<!-- <div class="padding" ng-show="show_error && register.code.$error.required">
-				<span class="error">验证码不能为空</span>
-			</div> -->
-			<div class="padding" ng-show="register.code.$dirty && code_is_error">
+			<div class="padding" ng-show="register.code.$dirty && captcha.code_is_error">
 				<span class="error">验证码不正确</span>
+			</div>
+			<div class="padding" ng-show="register.code.$error.pattern">
+				<span class="error">验证码为6位数!</span>
 			</div>
 
 			<!-- <div class="item">
