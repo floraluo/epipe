@@ -26,7 +26,11 @@
       "id": "cordova-plugin-app-version"
     },
     "cordova-plugin-inappbrowser",
-    "cordova-plugin-file-transfer"
+    "cordova-plugin-file-transfer",
+    {
+      "locator": "https://github.com/a631807682/ionic-plugin-deploy-private.git",
+      "id": "ionic-plugin-deploy-private"
+    }
   ],
   "cordovaPlatforms": [
     "android"

@@ -3,10 +3,33 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller', 'starter.directive', 'starter.service', 'starter.filter'])
+angular.module('starter', ['ionic','ngCordova', 
+  'ngCookies',
+  'starter.controller', 
+  'starter.directive', 
+  'starter.service', 
+  'starter.filter',
+  'ionic.service.core',
+  'ionic.service.deploy'])
+
+.config(['$ionicAppProvider', function($ionicAppProvider) {
+    // Identify app
+    $ionicAppProvider.identify({
+        // Your App ID
+        app_id: '5fe394ef',
+        // The public API key services will use for this app
+        api_key: '1f98a02dab45f4c129f1145b58b51a2f6e635ca3748980de',
+        domain: 'http://192.168.1.154:8100',
+        channel_tag: 'production'
+            // Your GCM sender ID/project number (Uncomment if supporting Android)
+            //gcm_id: 'YOUR_GCM_ID'
+    });
+
+}])
 .run(function($ionicPlatform, $ionicPopup,$timeout, $rootScope, $state, $stateParams,$ionicHistory,$cordovaAppVersion,$http, CONFIG,$ionicTabsDelegate) {
 
   $rootScope.appReady = {status:false,getHost:false};
+  $rootScope.update = false;
   $ionicPlatform.ready(function() {
     $http.get("http://www.epipe.cn/download/appConfig.js")
     .then(function(data){
@@ -89,7 +112,7 @@ angular.module('starter', ['ionic','ngCordova', 'ngCookies','starter.controller'
   //   $urlRouterProvider.otherwise('supplier/home');        
   // }
 
-$httpProvider.defaults.headers.get={'Content-Type':'jwt'};
+  $httpProvider.defaults.headers.get={'Content-Type':'jwt'};
   $stateProvider.state('supplier', {
     url: '/supplier',
     abstract: true,

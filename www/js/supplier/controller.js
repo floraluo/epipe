@@ -1,7 +1,7 @@
 angular.module('starter.controller' , [])
 
-.controller('SupplierCtrl', ['$rootScope', '$scope', '$state','$ionicHistory', '$ionicTabsDelegate',
-	function($rootScope, $scope, $state,$ionicHistory, $ionicTabsDelegate){
+.controller('SupplierCtrl', ['$timeout','$rootScope','httpService', '$scope', '$state','$ionicHistory', '$ionicTabsDelegate','$interval', '$ionicDeploy', '$ionicLoading', 'versionUpdateService',
+	function($timeout,$rootScope,httpService, $scope, $state,$ionicHistory, $ionicTabsDelegate,$interval, $ionicDeploy, $ionicLoading,versionUpdateService){
 	$rootScope.myGoBack = function(){
 		var backViewName = $ionicHistory.viewHistory().backView.stateName;
 		if( backViewName == 'supplier.quotation'){
@@ -29,6 +29,24 @@ angular.module('starter.controller' , [])
 		$ionicHistory.clearHistory();
 		$ionicHistory.clearCache();				
 	}
+
+	// 检查更新
+	var checkUpdateTime = $timeout(function(){
+		versionUpdateService.checkUpdate()
+	},8000);
+
+	 // $interval.cancel(checkUpdateTime);
+	// $rootScope.$watch('update', function(newValue, oldValue) {
+	//     if (newValue) {
+	//     	alert($interval.cancel(checkUpdateTime));
+	//     }else {
+	  //   	checkUpdateTime = $interval(function(){
+			// 	if(versionUpdateService.checkUpdate()) {
+			// 		$interval.cancel(checkUpdateTime);
+			// 	}
+			// },5000);
+	    // }
+	// });
 
 }])
     .controller('homeCtrl', ['$scope', '$state', '$ionicHistory','$rootScope', '$ionicBackdrop', '$ionicLoading', '$ionicNavBarDelegate', '$timeout',
@@ -333,9 +351,10 @@ angular.module('starter.controller' , [])
     	phone: '',
         userProfile: {
         	company: '',
-        	credentials: []
+        	credentials: ['img/ionic.png']
         }
     }
+    $scope.credentials = [];
     // 获取个人信息
     
 	$scope.$on('$ionicView.beforeEnter', function() {

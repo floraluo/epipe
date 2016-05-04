@@ -97,6 +97,7 @@ angular.module('starter.directive' , [])
 							host = CONFIG.host;
 						}
 						if(index == 0){
+							// 拍照
 							var picOptions = {
 								quality: 70, 
 								destinationType: 1, 
@@ -111,7 +112,7 @@ angular.module('starter.directive' , [])
 									console.log("success")
 									var response = JSON.parse(result.response);
 									if(response.status){
-										scope.supplierInfo.userProfile.credentials.push(host+"/public/uploaded/"+response.data.fileName);
+										credentials.push(host+"/public/uploaded/"+response.data.fileName);
 										hideSheet();
 										$ionicPopup.alert({
 											template: "上传成功",
@@ -128,20 +129,25 @@ angular.module('starter.directive' , [])
 								console.log(err)
 							})
 						}else if(index == 1){
+							// 图库选择
 							window.imagePicker.getPictures(
 								function(results) {
 									hideSheet();
+									// var cre = [];
 									
 									for (var i = 0; i < results.length; i++) {
 										// console.log('Image URI: ' + results[i]);
-										// scope.supplierInfo.userProfile.credentials.push(results[i]);
+										// credentials.push(results[i]);
 										$cordovaFileTransfer.upload(host+"/upload/image", results[i], uploadOptions)
 										.then(function(result) {
 											var response = JSON.parse(result.response);
-
 											if(response.status){
-												// alert(host+"/public/uoloaded/"+response.data.fileName)
-												scope.supplierInfo.userProfile.credentials.push(host+"/public/uploaded/"+response.data.fileName);
+												// alert(host+"/public/uploaded/"+response.data.fileName)
+												alert(typeof credentials);
+												// cre.push(host+"/public/uploaded/"+response.data.fileName);
+												// credentials=cre;
+												credentials.push(host+"/public/uploaded/"+response.data.fileName)
+												// credentials.push(host+"/public/uploaded/"+response.data.fileName);
 												// hideSheet();										
 											}
 										});
@@ -169,7 +175,7 @@ angular.module('starter.directive' , [])
 			// 	});
 			// 	confirmPopup.then(function(res) {
 			// 		if(res) {
-			// 			scope.supplierInfo.userProfile.credentials.splice(index,1)
+			// 			credentials.splice(index,1)
 			// 		}
 			// 	});
 			// }
